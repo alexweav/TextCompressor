@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,13 +27,15 @@ namespace TextCompressor {
             Console.WriteLine("1. Compress text");
             Console.WriteLine("2. Read binary data");
             int choice = Console.Read();
-            while(choice != 1 || choice != 2) {
+            Console.WriteLine(choice);
+            while(choice != 49 && choice != 50) {
                 Console.WriteLine("Invalid choice.");
                 choice = Console.Read();
             }
-            if (choice == 1) {
+            if (choice == 49) {
                 TextFile text = getTextFile();
-            } else if (choice == 2) {
+                
+            } else if (choice == 50) {
 
             }
         }
@@ -40,12 +43,12 @@ namespace TextCompressor {
         //Obtains a text file from the user
         private TextFile getTextFile() {
             Console.WriteLine("Please enter the location of the text file you want to compress.");
-            String fp = Console.ReadLine();
+            string fp = Console.ReadLine();
             TextFile file;
             while(true) {
                 try {
                     file = new TextFile(fp);
-                } catch(ArgumentException e) {
+                } catch(ArgumentException) {
                     Console.WriteLine("Invalid filepath.");
                     Console.WriteLine("Please enter a new filepath.");
                     fp = Console.ReadLine();

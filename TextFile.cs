@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 namespace TextCompressor {
     class TextFile {
 
-        private String filepath;
+        private string filepath;
 
         //Constructor
-        public TextFile(String filepath) {
+        public TextFile(string filepath) {
             if (isValidFilepath(filepath)) {
                 this.filepath = filepath;
             } else {
@@ -35,8 +35,23 @@ namespace TextCompressor {
 
         //Returns true if the given string is a valid filepath on the current machine
         //Returns false otherwise
-        private bool isValidFilepath(String filepath) {
+        private bool isValidFilepath(string filepath) {
             return File.Exists(filepath);
+        }
+
+        //Writes a set of lines to a text file.
+        public void writeLines(string[] lines) {
+            System.IO.File.WriteAllLines(this.filepath, lines);
+        }
+
+        //Reads the text file into a string.
+        public string readFile() {
+            try {
+                StreamReader reader = new StreamReader(this.filepath);
+                return reader.ReadToEnd();
+            } catch (Exception e) {
+                return null;
+            }
         }
 
 
