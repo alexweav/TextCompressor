@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextCompressor.Source {
+namespace TextCompressor {
     class TextFile {
 
         private String filepath;

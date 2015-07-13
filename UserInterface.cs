@@ -31,10 +31,29 @@ namespace TextCompressor {
                 choice = Console.Read();
             }
             if (choice == 1) {
-                
+                TextFile text = getTextFile();
             } else if (choice == 2) {
 
             }
+        }
+
+        //Obtains a text file from the user
+        private TextFile getTextFile() {
+            Console.WriteLine("Please enter the location of the text file you want to compress.");
+            String fp = Console.ReadLine();
+            TextFile file;
+            while(true) {
+                try {
+                    file = new TextFile(fp);
+                } catch(ArgumentException e) {
+                    Console.WriteLine("Invalid filepath.");
+                    Console.WriteLine("Please enter a new filepath.");
+                    fp = Console.ReadLine();
+                    continue;
+                }
+                break;
+            }
+            return file;
         }
     }
 }
