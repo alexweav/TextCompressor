@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using PriorityQueue;
+
 namespace TextCompressor {
 
     //Text-based user interface for TextCompressor which works in-console
@@ -27,14 +29,13 @@ namespace TextCompressor {
             Console.WriteLine("1. Compress text");
             Console.WriteLine("2. Read binary data");
             int choice = Console.Read();
-            Console.WriteLine(choice);
             while(choice != 49 && choice != 50) {
                 Console.WriteLine("Invalid choice.");
                 choice = Console.Read();
             }
             if (choice == 49) {
                 TextFile text = getTextFile();
-                
+
             } else if (choice == 50) {
 
             }
