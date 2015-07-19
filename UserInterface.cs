@@ -38,6 +38,14 @@ namespace TextCompressor {
                 char[] charset = { 'M', 'I', 'S', 'P', 'R', 'V', 'E', ' '};
                 int[] weights = { 1, 5, 4, 2, 2, 1, 1, 1};
                 HuffmanTree tree = new HuffmanTree(charset, weights);
+                Console.WriteLine(tree.getHuffmanCode('M'));
+                Console.WriteLine(tree.getHuffmanCode('I'));
+                Console.WriteLine(tree.getHuffmanCode('S'));
+                Console.WriteLine(tree.getHuffmanCode('P'));
+                Console.WriteLine(tree.getHuffmanCode('R'));
+                Console.WriteLine(tree.getHuffmanCode('V'));
+                Console.WriteLine(tree.getHuffmanCode('E'));
+                Console.WriteLine(tree.getHuffmanCode(' '));
 
             } else if (choice == 50) {
 

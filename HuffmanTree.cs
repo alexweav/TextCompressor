@@ -22,7 +22,6 @@ namespace TextCompressor {
             topNodes = new PriorityQueue<HuffmanTreeNode>();
             for (int i = 0; i < charset.Length; i++) {
                 HuffmanTreeNode currentNode = new HuffmanTreeNode(Char.ToString(charset[i]));
-                Console.WriteLine("Enqueueing '" + Char.ToString(charset[i]) + "' with weight " + weights[i]);
                 topNodes.enqueue(currentNode, weights[i]);
             }
         }
@@ -38,5 +37,32 @@ namespace TextCompressor {
             }
             head = topNodes.dequeueHighest();
         }
+
+        public char[] getCharset() {
+            string charString = head.Charset;
+            return charString.ToCharArray();
+        }
+
+        public string getHuffmanCode(char symbol) {
+            if(!getCharset().Contains(symbol)) {
+                return null;
+            }
+            HuffmanTreeNode currentNode = head;
+            string strSymbol = "" + symbol;
+            string code = "";
+            while (true) {
+                if (currentNode.Charset.Equals(strSymbol)) {
+                    return code;
+                }
+                if (currentNode.Left.Charset.Contains(symbol)) {    //traverse left
+                    code += "0";
+                    currentNode = currentNode.Left;
+                } else {    //traverse right
+                    code += "1";
+                    currentNode = currentNode.Right;
+                }
+            }
+        }
+
     }
 }
