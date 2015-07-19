@@ -54,11 +54,7 @@ namespace TextCompressor {
             }
         }
 
-        public EncodedFile compress() {
-            EncodedFile encoded = null;
-            HuffmanManager compressor = new HuffmanManager();
-            return encoded;
-        }
+        
 
     }
 }
