@@ -34,7 +34,10 @@ namespace TextCompressor {
                 choice = Console.Read();
             }
             if (choice == 49) {
-                TextFile text = getTextFile();
+                //TextFile text = getTextFile();
+                char[] charset = { 'M', 'I', 'S', 'P', 'R', 'V', 'E', ' '};
+                int[] weights = { 1, 5, 4, 2, 2, 1, 1, 1};
+                HuffmanTree tree = new HuffmanTree(charset, weights);
 
             } else if (choice == 50) {
 

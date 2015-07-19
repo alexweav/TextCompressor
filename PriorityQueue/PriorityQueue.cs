@@ -31,7 +31,7 @@ namespace PriorityQueue {
         }
 
         //Removes the element with the highest priority in the queue, returns that element
-        public T dequeueHighest() {
+        public T dequeueLowest() {
             if (!isEmpty()) {
                 T output = data[0].Data;
                 data.RemoveAt(0);
@@ -41,7 +41,7 @@ namespace PriorityQueue {
         }
 
         //Removes the element with the lowest priority in the queue, returns that element
-        public T dequeueLowest() {
+        public T dequeueHighest() {
             if (!isEmpty()) {
                 int len = this.data.Count;
                 T output = data[len - 1].Data;
@@ -68,9 +68,28 @@ namespace PriorityQueue {
             return default(T);
         }
 
+        public int highestPriority() {
+            if (!isEmpty()) {
+                int len = this.data.Count;
+                return data[len - 1].Priority;
+            }
+            return 0;
+        }
+
+        public int lowestPriority() {
+            if (!isEmpty()) {
+                return data[0].Priority;
+            }
+            return 0;
+        }
+
         //Returns whether the queue is empty or not
         public Boolean isEmpty() {
             return !this.data.Any();
+        }
+
+        public int length() {
+            return this.data.Count;
         }
     }
 }

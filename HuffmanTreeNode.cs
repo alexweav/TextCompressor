@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextCompressor.Source {
+namespace TextCompressor {
     class HuffmanTreeNode {
 
         private string charset = "";
@@ -16,6 +16,12 @@ namespace TextCompressor.Source {
             this.charset = charset;
             this.left = left;
             this.right = right;
+        }
+
+        public HuffmanTreeNode(string charset) {
+            this.charset = charset;
+            this.left = null;
+            this.right = null;
         }
 
         //get/set
