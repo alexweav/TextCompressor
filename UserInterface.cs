@@ -37,7 +37,11 @@ namespace TextCompressor {
                 TextFile text = getTextFile();
                 char[] charset = text.getCharset();
                 int[] weights = text.getCharFrequencies(charset);
-                
+                HuffmanTree tree = new HuffmanTree(charset, weights);
+                string[] codes = new string[charset.Length];
+                for (int i = 0; i < charset.Length; i++) {
+                    codes[i] = tree.getHuffmanCode(charset[i]);
+                }
             } else if (choice == 50) {
 
             }
