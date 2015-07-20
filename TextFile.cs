@@ -54,6 +54,35 @@ namespace TextCompressor {
             }
         }
 
+        //gets an array of every character type present in the document
+        public char[] getCharset() {
+            string charset = "";
+            string file = readFile();
+            int len = file.Length;
+            for (int i = 0; i < len; i++) {
+                if (!charset.Contains(file[i])) {
+                    charset += file[i];
+                }
+            }
+            return charset.ToCharArray();
+        }
+
+        public int[] getCharFrequencies(char[] charset) {
+            int len = charset.Length;
+            int[] frequencies = new int[len];
+            string file = readFile();
+            for (int i = 0; i < len; i++) {
+                int charTotal = 0;
+                for (int j = 0; j < file.Length; j++) {
+                    if (file[j].Equals(charset[i])) {
+                        ++charTotal;
+                    }
+                }
+                frequencies[i] = charTotal;
+            }
+            return frequencies;
+        }
+
         
 
     }
