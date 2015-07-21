@@ -68,6 +68,7 @@ namespace PriorityQueue {
             return default(T);
         }
 
+        //Returns the priority of the highest priority element in the queue
         public int highestPriority() {
             if (!isEmpty()) {
                 int len = this.data.Count;
@@ -76,6 +77,7 @@ namespace PriorityQueue {
             return 0;
         }
 
+        //Returns the priority of the lowest priority element in the queue
         public int lowestPriority() {
             if (!isEmpty()) {
                 return data[0].Priority;

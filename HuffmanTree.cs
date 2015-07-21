@@ -13,11 +13,13 @@ namespace TextCompressor {
 
         private HuffmanTreeNode head;
 
+        //constructor
         public HuffmanTree(char[] charset, int[] weights) {
             populateQueue(charset, weights);
             buildHuffmanTree();
         }
 
+        //Fills the priority queue with the appropriate characters and respective weights
         private void populateQueue(char[] charset, int[] weights) {
             topNodes = new PriorityQueue<HuffmanTreeNode>();
             for (int i = 0; i < charset.Length; i++) {
@@ -26,6 +28,7 @@ namespace TextCompressor {
             }
         }
 
+        //constructs a huffman tree from a priority queue of characters
         private void buildHuffmanTree() {
             while (topNodes.length() > 1) {
                 int node1Priority = topNodes.lowestPriority();
@@ -38,11 +41,14 @@ namespace TextCompressor {
             head = topNodes.dequeueHighest();
         }
 
+        //Returns an array of all chars stored in the huffman tree
         public char[] getCharset() {
             string charString = head.Charset;
             return charString.ToCharArray();
         }
 
+        //Traverses the huffman tree and obtains the huffman code for a given character
+        //Returns null if the char does not exist in the tree
         public string getHuffmanCode(char symbol) {
             if(!getCharset().Contains(symbol)) {
                 return null;
@@ -63,6 +69,41 @@ namespace TextCompressor {
                 }
             }
         }
+
+        //Writes the huffman tree to a binary string using the following algorithm:
+        //For each node, starting at root:
+        //If leaf node, output 1 + char
+        //If not leaf node, output 0, and keep traversing
+        //To read:
+        //Read bit.  If 1, then read the character, then return a new leaf node
+        //           If 0, decode left and right child nodes the same way, then return a new node with those children but no value
+        //algorithm in better detail: http://stackoverflow.com/questions/759707/efficient-way-of-storing-huffman-tree
+        //After reconstruction, empty nodes must be filled with correct charsets in order to make the tree traversable
+        public string getBinaryRepresentation() {
+            return buildBinaryString(head);
+        }
+
+        //process for getBinaryRepresentation()
+        //getBinaryRepresentation() is a public interface method which hides the starting parameters of this recursive process from the user
+        private string buildBinaryString(HuffmanTreeNode currentNode) {
+            if (currentNode == null) {
+                return "";
+            }
+            if (isLeaf(currentNode)) {
+                byte[] bytes = Encoding.UTF8.GetBytes(currentNode.Charset);
+                byte charValue = bytes[0];
+                string binary = Convert.ToString(charValue, 2);
+                return "1" + binary;
+            } else {
+                return "0" + buildBinaryString(currentNode.Left) + buildBinaryString(currentNode.Right);
+            }
+        }
+
+        //Returns whether a node is a leaf node or not
+        private Boolean isLeaf(HuffmanTreeNode node) {
+            return node.Left == null && node.Right == null;
+        }
+
 
     }
 }
