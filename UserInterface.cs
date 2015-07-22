@@ -40,7 +40,9 @@ namespace TextCompressor {
                 HuffmanTree tree = new HuffmanTree(charset, weights);
                 string[] codes = tree.getCodes(charset);
                 string encoded = text.encodeToString(charset, codes);
-                Console.WriteLine(encoded);
+                string huffmanData = tree.getBinaryRepresentation();
+                EncodedFile enf = new EncodedFile("E:\\Users\\Alexander Weaver\\My Documents\\encodedTEST.hct");
+                enf.writeFile(huffmanData, encoded);
             } else if (choice == 50) {
 
             }
@@ -51,7 +53,7 @@ namespace TextCompressor {
             Console.WriteLine("Please enter the location of the text file you want to compress.");
             string fp = Console.ReadLine();
             TextFile file;
-            while(true) {
+            /*(while(true) {
                 try {
                     file = new TextFile(fp);
                 } catch(ArgumentException) {
@@ -62,7 +64,8 @@ namespace TextCompressor {
                 }
                 break;
             }
-            return file;
+            return file;*/
+            return file = new TextFile("E:\\Users\\Alexander Weaver\\My Documents\\ayy lmao.txt");
         }
     }
 }
