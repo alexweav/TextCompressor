@@ -35,14 +35,7 @@ namespace TextCompressor {
             }
             if (choice == 49) {
                 TextFile text = getTextFile();
-                char[] charset = text.getCharset();
-                int[] weights = text.getCharFrequencies(charset);
-                HuffmanTree tree = new HuffmanTree(charset, weights);
-                string[] codes = tree.getCodes(charset);
-                string encoded = text.encodeToString(charset, codes);
-                string huffmanData = tree.getBinaryRepresentation();
-                EncodedFile enf = new EncodedFile("E:\\Users\\Alexander Weaver\\My Documents\\encodedTEST.hct");
-                enf.writeFile(huffmanData, encoded);
+                EncodedFile enf = text.encodeFile();
             } else if (choice == 50) {
 
             }

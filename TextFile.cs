@@ -10,6 +10,8 @@ namespace TextCompressor {
 
         private string filepath;
 
+        private const int BYTE_LENGTH = 8;
+
         //Constructor
         public TextFile(string filepath) {
             if (isValidFilepath(filepath)) {
@@ -94,6 +96,67 @@ namespace TextCompressor {
             }
             return encodedFile;
         }
+
+        public EncodedFile encodeFile() {
+            char[] charset = getCharset();
+            int[] weights = getCharFrequencies(charset);
+            HuffmanTree tree = new HuffmanTree(charset, weights);
+            string[] codes = tree.getCodes(charset);
+            string encoded = encodeToString(charset, codes);
+            string huffmanData = tree.getBinaryRepresentation();
+            EncodedFile enf = new EncodedFile("E:\\Users\\Alexander Weaver\\My Documents\\encodedTEST.hct");
+            writeEncodedFile(enf, huffmanData, encoded);
+            return enf;
+        }
+
+        private void writeEncodedFile(EncodedFile enf, string huffmanData, string body) {
+            BinaryWriter writer = new BinaryWriter(File.Open(enf.Filepath, FileMode.Create));
+            writeBinaryString(huffmanData, writer, true);
+            writeBinaryString(body, writer, false);
+        }
+
+        //Given a huffman data string, writes the length of the string followed by the string itself to the encoded file
+        //If the string's length is not an even multiple of 8 bytes, zeros are appended to the end appropriately
+        private void writeBinaryString(string data, BinaryWriter writer, Boolean writeLength) {
+            string[] groupedData = groupString(data, BYTE_LENGTH);
+            byte length = (byte)groupedData.Length;
+            if (writeLength) {
+                writer.Write(length);
+            }
+            int lastLength = groupedData[length - 1].Length;
+            for (int i = 0; i < 8 - lastLength; i++) {
+                groupedData[length - 1] += "0";
+            }
+            byte[] bytes = new byte[groupedData.Length];
+            for (int i = 0; i < groupedData.Length; ++i) {
+                bytes[i] = Convert.ToByte(groupedData[i], 2);
+            }
+            writer.Write(bytes);
+        }
+
+        //Splits a string st into a string array, each element of at most size groupSize
+        //If the length of st is not divisible by groupSize, the final element of the string array is sized appropriately
+        private string[] groupString(string st, int groupSize) {
+            int length = st.Length;
+            int numGroups;
+            if (length % groupSize == 0) {
+                numGroups = length / groupSize;
+            }
+            else {
+                numGroups = length / groupSize + 1;
+            }
+            string[] groups = new string[numGroups];
+            for (int i = 0; i < numGroups; ++i) {
+                if (i != numGroups - 1) {
+                    groups[i] = st.Substring(groupSize * i, groupSize);
+                }
+                else {
+                    groups[i] = st.Substring(groupSize * i);
+                }
+            }
+            return groups;
+        }
+
 
         
 
