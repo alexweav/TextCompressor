@@ -104,11 +104,11 @@ namespace TextCompressor {
             return node.Left == null && node.Right == null;
         }
 
-        public string[] getCodes() {
-            int len = getCharset().Length;
+        public string[] getCodes(char[] charset) {
+            int len = charset.Length;
             string[] codes = new string[len];
             for (int i = 0; i < len; i++) {
-                codes[i] = getHuffmanCode(getCharset()[i]);
+                codes[i] = getHuffmanCode(charset[i]);
             }
             return codes;
         }

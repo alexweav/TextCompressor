@@ -38,8 +38,9 @@ namespace TextCompressor {
                 char[] charset = text.getCharset();
                 int[] weights = text.getCharFrequencies(charset);
                 HuffmanTree tree = new HuffmanTree(charset, weights);
-                string[] codes = tree.getCodes();
-                
+                string[] codes = tree.getCodes(charset);
+                string encoded = text.encodeToString(charset, codes);
+                Console.WriteLine(encoded);
             } else if (choice == 50) {
 
             }
