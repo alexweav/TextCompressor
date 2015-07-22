@@ -84,12 +84,13 @@ namespace PriorityQueue {
             }
             return 0;
         }
-
+        
         //Returns whether the queue is empty or not
         public Boolean isEmpty() {
             return !this.data.Any();
         }
 
+        //Returns the length of the priority queue
         public int length() {
             return this.data.Count;
         }
