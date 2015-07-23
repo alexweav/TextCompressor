@@ -104,7 +104,7 @@ namespace TextCompressor {
             string[] codes = tree.getCodes(charset);
             string encoded = encodeToString(charset, codes);
             string huffmanData = tree.getBinaryRepresentation();
-            EncodedFile enf = new EncodedFile("E:\\Users\\Alexander Weaver\\My Documents\\encodedTEST.hct");
+            EncodedFile enf = new EncodedFile("E:\\Users\\Alexander Weaver\\My Documents\\encodedTEST.hct", EncodedFile.CREATE_NEW);
             writeEncodedFile(enf, huffmanData, encoded);
             return enf;
         }

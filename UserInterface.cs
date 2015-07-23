@@ -37,7 +37,9 @@ namespace TextCompressor {
                 TextFile text = getTextFile();
                 EncodedFile enf = text.encodeFile();
             } else if (choice == 50) {
-
+                EncodedFile encoded = getEncodedFile();
+                byte[] bytes = encoded.readFile();
+                
             }
         }
 
@@ -46,7 +48,7 @@ namespace TextCompressor {
             Console.WriteLine("Please enter the location of the text file you want to compress.");
             string fp = Console.ReadLine();
             TextFile file;
-            /*(while(true) {
+            while(true) {
                 try {
                     file = new TextFile(fp);
                 } catch(ArgumentException) {
@@ -57,8 +59,27 @@ namespace TextCompressor {
                 }
                 break;
             }
-            return file;*/
-            return file = new TextFile("E:\\Users\\Alexander Weaver\\My Documents\\ayy lmao.txt");
+            return file;
+            //return file = new TextFile("E:\\Users\\Alexander Weaver\\My Documents\\ayy lmao.txt");    //testing purposes
+        }
+
+        private EncodedFile getEncodedFile() {
+            Console.WriteLine("Please enter the location of the encoded file you want to view.");
+            string fp = Console.ReadLine();
+            EncodedFile file;
+            while (true) {
+                try {
+                    file = new EncodedFile(fp, EncodedFile.USE_EXISTING);
+                }
+                catch (ArgumentException) {
+                    Console.WriteLine("Invalid filepath.");
+                    Console.WriteLine("Please enter a new filepath.");
+                    fp = Console.ReadLine();
+                    continue;
+                }
+                break;
+            }
+            return file;
         }
     }
 }

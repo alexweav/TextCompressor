@@ -12,14 +12,21 @@ namespace TextCompressor {
 
         private int BYTE_LENGTH = 8;
 
+        public const Boolean CREATE_NEW = true;
+        public const Boolean USE_EXISTING = false;
+
         //constructor
-        public EncodedFile(string filepath) {
+        public EncodedFile(string filepath, Boolean creatingNew) {
             if (isValidFilepath(filepath)) {
                 this.filepath = filepath;
             }
             else {
-                File.Create(filepath);
-                this.filepath = filepath;
+                if (creatingNew) {
+                    File.Create(filepath);
+                    this.filepath = filepath;
+                } else {
+                    throw new ArgumentException("Filepath is not valid.");
+                }
             }
         }
 
@@ -44,5 +51,11 @@ namespace TextCompressor {
         private bool isValidFilepath(string filepath) {
             return File.Exists(filepath);
         }
+
+        public byte[] readFile() {
+            return File.ReadAllBytes(filepath);
+        }
+
+
     }
 }
