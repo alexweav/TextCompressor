@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 using PriorityQueue;
 
@@ -21,6 +22,12 @@ namespace TextCompressor {
 
         public HuffmanTree(string binary) {
             //TODO: build tree from binary representation
+            Queue<char> bitStream = new Queue<char>();
+            for (int i = 0; i < binary.Length; ++i) {
+                bitStream.Enqueue(binary[i]);
+            }
+            head = buildTreeFromBinary(bitStream);
+            populateSearchStrings(head);
         }
 
         //Fills the priority queue with the appropriate characters and respective weights
@@ -96,7 +103,7 @@ namespace TextCompressor {
             if (isLeaf(currentNode)) {
                 byte[] bytes = Encoding.ASCII.GetBytes(currentNode.Charset);
                 byte charValue = bytes[0];
-                string binary = Convert.ToString(charValue, 2);
+                string binary = Convert.ToString(charValue, 2).PadLeft(7, '0');
                 return "1" + binary;
             } else {
                 return "0" + buildBinaryString(currentNode.Left) + buildBinaryString(currentNode.Right);
@@ -115,6 +122,40 @@ namespace TextCompressor {
                 codes[i] = getHuffmanCode(charset[i]);
             }
             return codes;
+        }
+
+        private HuffmanTreeNode buildTreeFromBinary(Queue<char> stream) {
+            char bit = stream.Dequeue();
+            if (bit == '1') {
+                return new HuffmanTreeNode(getASCIIChar(stream), null, null);
+            } else {
+                HuffmanTreeNode leftChild = buildTreeFromBinary(stream);
+                HuffmanTreeNode rightChild = buildTreeFromBinary(stream);
+                return new HuffmanTreeNode("", leftChild, rightChild);
+            }
+        }
+
+        private string getASCIIChar(Queue<char> stream) {
+            string binary = "0";
+            for (int i = 0; i < 7; i++) {
+                binary += stream.Dequeue();
+            }
+            byte[] ch = { Convert.ToByte(binary, 2)};
+            return Encoding.ASCII.GetString(ch);
+        }
+
+        private void populateSearchStrings(HuffmanTreeNode currentNode) {
+            string leftCharset = currentNode.Left.Charset;
+            string rightCharset = currentNode.Right.Charset;
+            if (leftCharset == "") {
+                populateSearchStrings(currentNode.Left);
+                leftCharset = currentNode.Left.Charset;
+            }
+            if (rightCharset == "") {
+                populateSearchStrings(currentNode.Right);
+                rightCharset = currentNode.Right.Charset;
+            }
+            currentNode.Charset = leftCharset + rightCharset;
         }
 
 

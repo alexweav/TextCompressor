@@ -67,6 +67,7 @@ namespace TextCompressor {
                 huffmanData += Convert.ToString(hData[i], 2).PadLeft(8, '0');
             }
             HuffmanTree tree = new HuffmanTree(huffmanData);
+            Console.WriteLine(tree.getHuffmanCode(','));
         }
 
 
