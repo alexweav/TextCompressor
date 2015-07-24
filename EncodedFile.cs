@@ -57,9 +57,23 @@ namespace TextCompressor {
         }
 
         public void decodeFile() {
-            short huffmanDataLength;
             byte[] file = readFile();
-            huffmanDataLength = file[0];
+            byte huffmanDataLength = file[0];
+            int fileStartIndex = huffmanDataLength + 1;
+            HuffmanTree tree = getTreeFromFile(file, huffmanDataLength);
+            Console.WriteLine(tree.getHuffmanCode(','));           //TEST TEST TEST
+            Dictionary<string, char> codeTable = getCodeDictionary(tree);
+            byte[] textData = new byte[file.Length - huffmanDataLength - 1];
+            Array.Copy(file, fileStartIndex, textData, 0, textData.Length);
+            string textDataStr = "";
+            for (int i = 0; i < textData.Length; ++i) {
+                textDataStr += Convert.ToString(textData[i], 2).PadLeft(8, '0');
+            }
+            string text = getText(textDataStr, codeTable);
+            Console.WriteLine(text);
+        }
+
+        private HuffmanTree getTreeFromFile(byte[] file, byte huffmanDataLength) {
             byte[] hData = new byte[huffmanDataLength];
             Array.Copy(file, 1, hData, 0, huffmanDataLength);
             string huffmanData = "";
@@ -67,8 +81,45 @@ namespace TextCompressor {
                 huffmanData += Convert.ToString(hData[i], 2).PadLeft(8, '0');
             }
             HuffmanTree tree = new HuffmanTree(huffmanData);
-            Console.WriteLine(tree.getHuffmanCode(','));
+            return tree;
         }
+
+        private Dictionary<string, char> getCodeDictionary(HuffmanTree tree) {
+            Dictionary<string, char> table = new Dictionary<string, char>();
+            char[] charset = tree.getCharset();
+            for (int i = 0; i < charset.Length; ++i) {
+                try {
+                    table.Add(tree.getHuffmanCode(charset[i]), charset[i]);
+                } catch {
+                    continue;   //...
+                }
+            }
+            return table;
+        }
+
+        private string getText(string textData, Dictionary<string, char> table) {
+            int captureSize = 1;
+            int index = 0;
+            string text = "";
+            char converted = '0';
+            while (true) {
+                try {
+                    string sub = textData.Substring(index, captureSize);
+                    if (table.TryGetValue(sub, out converted)) {
+                        text += converted;
+                        index = index + captureSize;
+                        captureSize = 1;
+                    } else {
+                        ++captureSize;
+                    }
+                } catch {
+                    break;
+                }
+            }
+            return text;
+        }
+
+
 
 
 
