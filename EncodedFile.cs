@@ -56,6 +56,20 @@ namespace TextCompressor {
             return File.ReadAllBytes(filepath);
         }
 
+        public void decodeFile() {
+            short huffmanDataLength;
+            byte[] file = readFile();
+            huffmanDataLength = file[0];
+            byte[] hData = new byte[huffmanDataLength];
+            Array.Copy(file, 1, hData, 0, huffmanDataLength);
+            string huffmanData = "";
+            for (int i = 0; i < hData.Length; ++i) {
+                huffmanData += Convert.ToString(hData[i], 2).PadLeft(8, '0');
+            }
+            HuffmanTree tree = new HuffmanTree(huffmanData);
+        }
+
+
 
     }
 }

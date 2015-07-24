@@ -19,6 +19,10 @@ namespace TextCompressor {
             buildHuffmanTree();
         }
 
+        public HuffmanTree(string binary) {
+            //TODO: build tree from binary representation
+        }
+
         //Fills the priority queue with the appropriate characters and respective weights
         private void populateQueue(char[] charset, int[] weights) {
             topNodes = new PriorityQueue<HuffmanTreeNode>();
@@ -90,7 +94,7 @@ namespace TextCompressor {
                 return "";
             }
             if (isLeaf(currentNode)) {
-                byte[] bytes = Encoding.UTF8.GetBytes(currentNode.Charset);
+                byte[] bytes = Encoding.ASCII.GetBytes(currentNode.Charset);
                 byte charValue = bytes[0];
                 string binary = Convert.ToString(charValue, 2);
                 return "1" + binary;

@@ -85,7 +85,7 @@ namespace TextCompressor {
             return frequencies;
         }
 
-        public string encodeToString(char[] chars, string[] codes) {
+        private string encodeToString(char[] chars, string[] codes) {
             string file = readFile();
             string encodedFile = "";
             for (int i = 0; i < file.Length; i++) {

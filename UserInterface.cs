@@ -38,7 +38,7 @@ namespace TextCompressor {
                 EncodedFile enf = text.encodeFile();
             } else if (choice == 50) {
                 EncodedFile encoded = getEncodedFile();
-                byte[] bytes = encoded.readFile();
+                encoded.decodeFile();
                 
             }
         }
