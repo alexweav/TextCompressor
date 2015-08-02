@@ -52,10 +52,13 @@ namespace TextCompressor {
             return File.Exists(filepath);
         }
 
+        //Returns the entire file as a byte array
         public byte[] readFile() {
             return File.ReadAllBytes(filepath);
         }
 
+        //Decodes the file and prints the results to console
+        //Desperately in need of refactorization
         public void decodeFile() {
             byte[] file = readFile();
             byte huffmanDataLength = file[0];
@@ -73,6 +76,7 @@ namespace TextCompressor {
             Console.WriteLine(text);
         }
 
+        //Reads the huffman data at the beginning of the file, and returns the corresponding huffman tree
         private HuffmanTree getTreeFromFile(byte[] file, byte huffmanDataLength) {
             byte[] hData = new byte[huffmanDataLength];
             Array.Copy(file, 1, hData, 0, huffmanDataLength);
@@ -84,6 +88,7 @@ namespace TextCompressor {
             return tree;
         }
 
+        //Produces a lookup dictionary which maps a given encoded binary symbol, in string format to the symbol's corresponding ASCII character
         private Dictionary<string, char> getCodeDictionary(HuffmanTree tree) {
             Dictionary<string, char> table = new Dictionary<string, char>();
             char[] charset = tree.getCharset();
@@ -97,6 +102,9 @@ namespace TextCompressor {
             return table;
         }
 
+        //Takes a binary string of the main data portion of an encoded file
+        //Takes a lookup table
+        //Returns the decoded string with respect to the given lookup table
         private string getText(string textData, Dictionary<string, char> table) {
             int captureSize = 1;
             int index = 0;

@@ -69,6 +69,9 @@ namespace TextCompressor {
             return charset.ToCharArray();
         }
 
+        //Takes a set of characters in char array form
+        //A *character frequency* is the number of times in which a given character appears in the associated text file
+        //Returns an array of integers where the nth integer in the array is the character frequency of the nth character in the input array
         public int[] getCharFrequencies(char[] charset) {
             int len = charset.Length;
             int[] frequencies = new int[len];

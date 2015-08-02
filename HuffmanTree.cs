@@ -21,7 +21,6 @@ namespace TextCompressor {
         }
 
         public HuffmanTree(string binary) {
-            //TODO: build tree from binary representation
             Queue<char> bitStream = new Queue<char>();
             for (int i = 0; i < binary.Length; ++i) {
                 bitStream.Enqueue(binary[i]);
@@ -115,6 +114,8 @@ namespace TextCompressor {
             return node.Left == null && node.Right == null;
         }
 
+        //Given an array of characters, retrieves the corresponding encoded binary strings in an array
+        //The nth string of the output is the encoded form of the nth character of the input
         public string[] getCodes(char[] charset) {
             int len = charset.Length;
             string[] codes = new string[len];
@@ -124,6 +125,8 @@ namespace TextCompressor {
             return codes;
         }
 
+        //Takes the encoded huffman tree data from the beginning of an encoded document as a binary char stream
+        //Populates the huffman tree from given data
         private HuffmanTreeNode buildTreeFromBinary(Queue<char> stream) {
             char bit = stream.Dequeue();
             if (bit == '1') {
@@ -135,6 +138,7 @@ namespace TextCompressor {
             }
         }
 
+        //Retrieves the next ascii character from the stream, given as a queue of 0 and 1 chars
         private string getASCIIChar(Queue<char> stream) {
             string binary = "0";
             for (int i = 0; i < 7; i++) {
@@ -143,6 +147,7 @@ namespace TextCompressor {
             byte[] ch = { Convert.ToByte(binary, 2)};
             return Encoding.ASCII.GetString(ch);
         }
+
 
         private void populateSearchStrings(HuffmanTreeNode currentNode) {
             string leftCharset = currentNode.Left.Charset;

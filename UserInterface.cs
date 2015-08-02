@@ -45,7 +45,7 @@ namespace TextCompressor {
 
         //Obtains a text file from the user
         private TextFile getTextFile() {
-            /*Console.WriteLine("Please enter the location of the text file you want to compress.");
+            Console.WriteLine("Please enter the location of the text file you want to compress.");
             string fp = Console.ReadLine();
             TextFile file;
             while(true) {
@@ -59,12 +59,13 @@ namespace TextCompressor {
                 }
                 break;
             }
-            return file;*/
-            return new TextFile("E:\\Users\\Alexander Weaver\\My Documents\\ayy lmao.txt");    //testing purposes
+            return file;
+            //return new TextFile("E:\\Users\\Alexander Weaver\\My Documents\\ayy lmao.txt");    //testing purposes
         }
 
+        //gets an encoded file from the user
         private EncodedFile getEncodedFile() {
-            /*Console.WriteLine("Please enter the location of the encoded file you want to view.");
+            Console.WriteLine("Please enter the location of the encoded file you want to view.");
             string fp = Console.ReadLine();
             EncodedFile file;
             while (true) {
@@ -79,8 +80,8 @@ namespace TextCompressor {
                 }
                 break;
             }
-            return file;*/
-            return new EncodedFile("E:\\Users\\Alexander Weaver\\My Documents\\encodedTEST.hct", EncodedFile.USE_EXISTING);    //testing purposes
+            return file;
+            //return new EncodedFile("E:\\Users\\Alexander Weaver\\My Documents\\encodedTEST.hct", EncodedFile.USE_EXISTING);    //testing purposes
         }
     }
 }

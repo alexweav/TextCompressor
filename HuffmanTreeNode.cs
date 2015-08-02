@@ -11,13 +11,14 @@ namespace TextCompressor {
         private HuffmanTreeNode left = null;
         private HuffmanTreeNode right = null;
 
-        //constructor
+        //general use constructor
         public HuffmanTreeNode(string charset, HuffmanTreeNode left, HuffmanTreeNode right) {
             this.charset = charset;
             this.left = left;
             this.right = right;
         }
 
+        //constructs leaf node with specified charset
         public HuffmanTreeNode(string charset) {
             this.charset = charset;
             this.left = null;
