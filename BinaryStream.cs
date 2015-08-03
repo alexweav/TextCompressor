@@ -28,12 +28,14 @@ namespace TextCompressor.Source
         }
         #endregion
 
+        //Reads a single bit from the data stream, returns a 0 or 1 in byte length reflecting the bit's state
         public byte readBit() {
             byte currentBit = getCurrentBit();
             changeIndices(1);
             return currentBit;
         }
 
+        //Reads 8 bits from the data stream, and returns the data 
         public byte readByte() {
             byte output = 0;
             for (byte i = 0; i < BYTE_LENGTH; ++i) {
@@ -57,6 +59,9 @@ namespace TextCompressor.Source
             }
         }
 
+        //Returns a 0 or 1 (byte length, due to C#'s pickiness) reflecting the state of the (bitIndex)th bit of the (byteIndex)th byte
+        //of the data array
+        //Does not advance the pointers
         private byte getCurrentBit() {
             byte andBuffer = (byte)(1 << bitIndex);
             byte res = (byte)(data[byteIndex] & andBuffer);
