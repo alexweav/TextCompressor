@@ -33,7 +33,17 @@ namespace TextCompressor.Source
             changeIndices(1);
             return currentBit;
         }
-        
+
+        public byte readByte() {
+            byte output = 0;
+            for (byte i = 0; i < BYTE_LENGTH; ++i) {
+                byte bit = readBit();
+                bit = (byte)(bit << i);
+                output = (byte)(output | bit);
+            }
+            return output;
+        }
+
         //Advances the "current bit" indices by the specified number of bits
         private void changeIndices(int delta) {
             if (byteIndex + ((bitIndex + delta) / BYTE_LENGTH) > this.data.Length - 1) {
