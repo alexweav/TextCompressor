@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-using PriorityQueue;
+using DataStructures;
 
 namespace TextCompressor {
     class HuffmanTree {
@@ -20,12 +20,8 @@ namespace TextCompressor {
             buildHuffmanTree();
         }
 
-        public HuffmanTree(string binary) {
-            Queue<char> bitStream = new Queue<char>();
-            for (int i = 0; i < binary.Length; ++i) {
-                bitStream.Enqueue(binary[i]);
-            }
-            head = buildTreeFromBinary(bitStream);
+        public HuffmanTree(BinaryStream binary) {
+            head = buildTreeFromBinary(binary);
             populateSearchStrings(head);
         }
 
@@ -125,11 +121,11 @@ namespace TextCompressor {
             return codes;
         }
 
-        //Takes the encoded huffman tree data from the beginning of an encoded document as a binary char stream
+        //Takes the encoded huffman tree data from the beginning of an encoded document as a binary stream
         //Populates the huffman tree from given data
-        private HuffmanTreeNode buildTreeFromBinary(Queue<char> stream) {
-            char bit = stream.Dequeue();
-            if (bit == '1') {
+        private HuffmanTreeNode buildTreeFromBinary(BinaryStream stream) {
+            byte bit = stream.readBit();
+            if (bit == 1) {
                 return new HuffmanTreeNode(getASCIIChar(stream), null, null);
             } else {
                 HuffmanTreeNode leftChild = buildTreeFromBinary(stream);
@@ -138,13 +134,8 @@ namespace TextCompressor {
             }
         }
 
-        //Retrieves the next ascii character from the stream, given as a queue of 0 and 1 chars
-        private string getASCIIChar(Queue<char> stream) {
-            string binary = "0";
-            for (int i = 0; i < 7; i++) {
-                binary += stream.Dequeue();
-            }
-            byte[] ch = { Convert.ToByte(binary, 2)};
+        private string getASCIIChar(BinaryStream stream) {
+            byte[] ch = { stream.readByte() };
             return Encoding.ASCII.GetString(ch);
         }
 

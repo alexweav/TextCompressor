@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using DataStructures;
+
 namespace TextCompressor {
     class EncodedFile {
 
@@ -80,10 +82,7 @@ namespace TextCompressor {
         private HuffmanTree getTreeFromFile(byte[] file, byte huffmanDataLength) {
             byte[] hData = new byte[huffmanDataLength];
             Array.Copy(file, 1, hData, 0, huffmanDataLength);
-            string huffmanData = "";
-            for (int i = 0; i < hData.Length; ++i) {
-                huffmanData += Convert.ToString(hData[i], 2).PadLeft(8, '0');
-            }
+            BinaryStream huffmanData = new BinaryStream(hData);
             HuffmanTree tree = new HuffmanTree(huffmanData);
             return tree;
         }
