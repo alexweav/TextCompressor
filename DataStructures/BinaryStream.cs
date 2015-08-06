@@ -67,7 +67,7 @@ namespace DataStructures {
                     bitIndex = initialBitIndex;
                     throw new IndexOutOfRangeException("Stream has ended.");
                 }
-                bit = (byte)(bit << i);
+                bit = (byte)(bit << 7-i);
                 output = (byte)(output | bit);
             }
             return output;
@@ -90,7 +90,7 @@ namespace DataStructures {
         //of the data array
         //Does not advance the pointers
         private byte getCurrentBit() {
-            byte andBuffer = (byte)(1 << bitIndex);
+            byte andBuffer = (byte)(128 >> bitIndex);
             byte res = (byte)(data[byteIndex] & andBuffer);
             if (res == 0) {
                 return (byte)0;
