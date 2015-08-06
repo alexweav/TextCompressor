@@ -135,7 +135,13 @@ namespace TextCompressor {
         }
 
         private string getASCIIChar(BinaryStream stream) {
-            byte[] ch = { stream.readByte() };
+            byte bCh = 0;
+            for (int i = 1; i < 8; ++i) {
+                byte bit = stream.readBit();
+                bit = (byte)(bit << 7-i);
+                bCh = (byte)(bCh | bit);
+            }
+            byte[] ch = { bCh };
             return Encoding.ASCII.GetString(ch);
         }
 
