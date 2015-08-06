@@ -66,7 +66,6 @@ namespace TextCompressor {
             byte huffmanDataLength = file[0];
             int fileStartIndex = huffmanDataLength + 1;
             HuffmanTree tree = getTreeFromFile(file, huffmanDataLength);
-            Console.WriteLine(tree.getHuffmanCode(','));           //TEST TEST TEST
             Dictionary<string, char> codeTable = getCodeDictionary(tree);
             byte[] textData = new byte[file.Length - huffmanDataLength - 1];
             Array.Copy(file, fileStartIndex, textData, 0, textData.Length);

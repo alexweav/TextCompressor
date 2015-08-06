@@ -107,7 +107,6 @@ namespace TextCompressor {
             string[] codes = tree.getCodes(charset);
             string encoded = encodeToString(charset, codes);
             string huffmanData = tree.getBinaryRepresentation();
-            Console.WriteLine(tree.getHuffmanCode(','));                //TEST TEST TEST
             EncodedFile enf = new EncodedFile("C:\\Users\\Owner\\Documents\\encodedTEST.hct", EncodedFile.CREATE_NEW); //get fp from user
             writeEncodedFile(enf, huffmanData, encoded);
             return enf;
