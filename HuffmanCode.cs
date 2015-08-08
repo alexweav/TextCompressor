@@ -3,59 +3,60 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace TextCompressor {
-    class HuffmanCode {
+    public class HuffmanCode {
 
-        private List<byte> data;
+        private BigInteger data;
         private byte bitLength;
 
+        public HuffmanCode() {
+            this.bitLength = 0;
+            data = new BigInteger(0);
+        }
+
         public HuffmanCode(string binary) {
+            if (binary == "") {
+                throw new ArgumentException("Empty binary string cannot be constructed.");
+            }
             this.bitLength = (byte)binary.Length;
-            data = new List<byte>();
+            data = new BigInteger(0);
+            bitLength = 0;
+            for (int i = 0; i < binary.Length; ++i) {
+                if (binary[i] == 48) {
+                    concatenate(0);
+                } else if (binary[i] == 49) {
+                    concatenate(1);
+                } else {
+                    throw new ArgumentException("Binary string must consist of strictly 0s and 1s");
+                }
+            }
         }
 
         public byte getLength() {
             return bitLength;
         }
 
+        public Boolean isEmpty() {
+            return bitLength == 0;
+        }
+
+        public int NumericValue() {
+            return (int)data;
+        }
+
         public void concatenate(byte value) {
             if (value != 0 && value != 1) {
-                throw new ArgumentException("Binary value must be a 0 or a 1");
+                throw new ArgumentOutOfRangeException("Binary value must be a 0 or a 1");
             }
-            if (bitLength == 0) {
-                data.Add(0);
-                data[0] = value;
-            } else if (bitLength % 8 == 0 && bitLength != 0) {
-                data.Insert(0, firstBit(data[0]));
-                for (int i = 1; i < data.Count; ++i) {
-                    data[i] = (byte)(data[i] << 1);
-                    if (i < data.Count - 1) {
-                        data[i] = (byte)(data[i] | firstBit(data[i+1]));
-                    } else {
-                        data[i] = (byte)(data[i] | value);
-                    }
-                }
-            } else {
-                for (int i = 0; i < data.Count; ++i) {
-                    data[i] = (byte)(data[i] << 1);
-                    if (i < data.Count - 1) {
-                        data[i] = (byte)(data[i] | firstBit(data[i+1]));
-                    } else {
-                        data[i] = (byte)(data[i] | value);
-                    }
-                }
-            }
+            this.data = BigInteger.Multiply(this.data, new BigInteger(2));
+            this.data = BigInteger.Add(this.data, new BigInteger(value));
             ++bitLength;
-
         }
 
-        private byte firstBit(byte b) {
-            if ((b & 128) == 0) {
-                return 0;
-            } else {
-                return 1;
-            }
-        }
+        
+
+        
     }
 }
