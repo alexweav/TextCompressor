@@ -51,7 +51,7 @@ namespace TextCompressor {
             try {
                 StreamReader reader = new StreamReader(this.filepath);
                 return reader.ReadToEnd();
-            } catch (Exception e) {
+            } catch (Exception) {
                 return null;
             }
         }
@@ -88,13 +88,13 @@ namespace TextCompressor {
             return frequencies;
         }
 
-        private string encodeToString(char[] chars, string[] codes) {
+        private string encodeToString(char[] chars, HuffmanCode[] codes) {
             string file = readFile();
             string encodedFile = "";
             for (int i = 0; i < file.Length; i++) {
                 if (chars.Contains(file[i])) {
                     int index = Array.IndexOf(chars, file[i]);
-                    encodedFile += codes[index];
+                    encodedFile += codes[index];    //CHANGE THIS, SHOULD += BINARY DATA OF codes[index] 
                 }
             }
             return encodedFile;
@@ -104,7 +104,7 @@ namespace TextCompressor {
             char[] charset = getCharset();
             int[] weights = getCharFrequencies(charset);
             HuffmanTree tree = new HuffmanTree(charset, weights);
-            string[] codes = tree.getCodes(charset);
+            HuffmanCode[] codes = tree.getCodes(charset);
             string encoded = encodeToString(charset, codes);
             string huffmanData = tree.getBinaryRepresentation();
             EncodedFile enf = new EncodedFile("C:\\Users\\Owner\\Documents\\encodedTEST.hct", EncodedFile.CREATE_NEW); //get fp from user

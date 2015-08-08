@@ -55,6 +55,18 @@ namespace TextCompressor {
             ++bitLength;
         }
 
+        public Boolean isEqual(HuffmanCode code) {
+            if (this.bitLength == 0) {
+                return code.getLength() == 0;
+            } else {
+                if (this.getLength() == code.getLength()) {
+                    return this.NumericValue() == code.NumericValue();
+                } else {
+                    return false;
+                }
+            }
+        }
+
         
 
         

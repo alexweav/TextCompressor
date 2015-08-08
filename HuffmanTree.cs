@@ -55,7 +55,7 @@ namespace TextCompressor {
 
         //Traverses the huffman tree and obtains the huffman code for a given character
         //Returns null if the char does not exist in the tree
-        public string getHuffmanCode(char symbol) {
+        /*public string getHuffmanCode(char symbol) {
             if(!getCharset().Contains(symbol)) {
                 return null;
             }
@@ -71,6 +71,27 @@ namespace TextCompressor {
                     currentNode = currentNode.Left;
                 } else {    //traverse right
                     code += "1";
+                    currentNode = currentNode.Right;
+                }
+            }
+        }*/
+
+        public HuffmanCode getHuffmanCode(char symbol) {
+            if (!getCharset().Contains(symbol)) {
+                return null;
+            }
+            HuffmanTreeNode currentNode = head;
+            string strSymbol = "" + symbol;
+            HuffmanCode code = new HuffmanCode();
+            while (true) {
+                if (currentNode.Charset.Equals(strSymbol)) {
+                    return code;
+                }
+                if (currentNode.Left.Charset.Contains(symbol)) {
+                    code.concatenate(0);
+                    currentNode = currentNode.Left;
+                } else {
+                    code.concatenate(1);
                     currentNode = currentNode.Right;
                 }
             }
@@ -112,9 +133,9 @@ namespace TextCompressor {
 
         //Given an array of characters, retrieves the corresponding encoded binary strings in an array
         //The nth string of the output is the encoded form of the nth character of the input
-        public string[] getCodes(char[] charset) {
+        public HuffmanCode[] getCodes(char[] charset) {
             int len = charset.Length;
-            string[] codes = new string[len];
+            HuffmanCode[] codes = new HuffmanCode[len];
             for (int i = 0; i < len; i++) {
                 codes[i] = getHuffmanCode(charset[i]);
             }

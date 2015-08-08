@@ -66,14 +66,10 @@ namespace TextCompressor {
             byte huffmanDataLength = file[0];
             int fileStartIndex = huffmanDataLength + 1;
             HuffmanTree tree = getTreeFromFile(file, huffmanDataLength);
-            Dictionary<string, char> codeTable = getCodeDictionary(tree);
+            Dictionary<HuffmanCode, char> codeTable = getCodeDictionary(tree);
             byte[] textData = new byte[file.Length - huffmanDataLength - 1];
             Array.Copy(file, fileStartIndex, textData, 0, textData.Length);
-            string textDataStr = "";
-            for (int i = 0; i < textData.Length; ++i) {
-                textDataStr += Convert.ToString(textData[i], 2).PadLeft(8, '0');
-            }
-            string text = getText(textDataStr, codeTable);
+            string text = getText(new BinaryStream(textData), codeTable);
             Console.WriteLine(text);
         }
 
@@ -87,7 +83,7 @@ namespace TextCompressor {
         }
 
         //Produces a lookup dictionary which maps a given encoded binary symbol, in string format to the symbol's corresponding ASCII character
-        private Dictionary<string, char> getCodeDictionary(HuffmanTree tree) {
+        /*private Dictionary<string, char> getCodeDictionary(HuffmanTree tree) {
             Dictionary<string, char> table = new Dictionary<string, char>();
             char[] charset = tree.getCharset();
             for (int i = 0; i < charset.Length; ++i) {
@@ -95,6 +91,19 @@ namespace TextCompressor {
                     table.Add(tree.getHuffmanCode(charset[i]), charset[i]);
                 } catch {
                     continue;   //...
+                }
+            }
+            return table;
+        }*/
+        //TODO: Complete. Requires a new tree.getHuffmanCode() function
+        private Dictionary<HuffmanCode, char> getCodeDictionary(HuffmanTree tree) {
+            Dictionary<HuffmanCode, char> table = new Dictionary<HuffmanCode, char>();
+            char[] charset = tree.getCharset();
+            for (int i = 0; i < charset.Length; ++i) {
+                try {
+                    table.Add(tree.getHuffmanCode(charset[i]), charset[i]);
+                } catch {
+                    continue; //...
                 }
             }
             return table;
@@ -120,6 +129,23 @@ namespace TextCompressor {
                     }
                 } catch {
                     break;
+                }
+            }
+            return text;
+        }
+
+        //TODO: Complete. Requires a new code dictionary item in this.getCodeDictionary()
+        //and this.decodeFile()
+        private string getText(BinaryStream textData, Dictionary<HuffmanCode, char> table) {
+            string text = "";
+            HuffmanCode code = new HuffmanCode();
+            char resultChar;
+            while (!textData.isEndOfStream()) {
+                if (table.TryGetValue(code, out resultChar)) {
+                    text += resultChar;
+                    code = new HuffmanCode();
+                } else {
+                    code.concatenate(textData.readBit());
                 }
             }
             return text;
