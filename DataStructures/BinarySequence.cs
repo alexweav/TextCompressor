@@ -6,16 +6,24 @@ using System.Threading.Tasks;
 using System.Numerics;
 
 namespace DataStructures {
+
+    //General use, arbitrary-precision string of binary data
+    //Does not have an inherent byte-wise division as is prevalent in C#
+    //Does not have any groupings or outward-visible divisions of any kind
+    //Does not provide support for mathematical operations (e.g. BigNum)
     public class BinarySequence {
 
         private BigInteger data;
         private byte bitLength;
 
+        //Builds an empty BinarySequence
         public BinarySequence() {
             this.bitLength = 0;
             data = new BigInteger(0);
         }
 
+        //Builds a BinarySequence from a given string of 0 and 1 characters
+        //Any other characters in the string will throw an exception
         public BinarySequence(string binary) {
             if (binary == "") {
                 throw new ArgumentException("Empty binary string cannot be constructed.");
@@ -34,18 +42,24 @@ namespace DataStructures {
             }
         }
 
+        //Returns the bit-length of the BinarySequence
         public byte getLength() {
             return bitLength;
         }
 
+        //Returns a boolean reflecting whether or not the BinarySequence is empty
         public Boolean isEmpty() {
             return bitLength == 0;
         }
 
+        //Converts the BinaryString to an integer value and returns the value
+        //If the binary string is longer than 32 bits, data loss will occur
         public int NumericValue() {
             return (int)data;
         }
 
+        //Takes a 0 or 1 in the form of a byte
+        //Appends the binary digit to the end of the BinarySequence
         public void concatenate(byte value) {
             if (value != 0 && value != 1) {
                 throw new ArgumentOutOfRangeException("Binary value must be a 0 or a 1");
@@ -55,6 +69,20 @@ namespace DataStructures {
             ++bitLength;
         }
 
+        //Takes a 0 or 1 in the form of a char
+        //Appends the binary digit to the end of the BinarySequence
+        public void concatenate(char value) {
+            if(value == 48) {
+                concatenate(0);
+            } else if (value == 49) {
+                concatenate(1);
+            } else {
+                throw new ArgumentException("Character must be a 0 or a 1.");
+            }
+        }
+
+        //Takes another BinarySequence
+        //Returns whether or not this BinarySequence is equivalent to the provided sequence
         public Boolean isEqual(BinarySequence code) {
             if (this.bitLength == 0) {
                 return code.getLength() == 0;
