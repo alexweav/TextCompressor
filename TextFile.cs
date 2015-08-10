@@ -88,6 +88,8 @@ namespace TextCompressor {
             return frequencies;
         }
 
+        //Encodes the text file with specified character-code lookup tables
+        //Returns the encoded file in the form of a binary string
         private string encodeToString(char[] chars, HuffmanCode[] codes) {
             string file = readFile();
             string encodedFile = "";
@@ -100,6 +102,7 @@ namespace TextCompressor {
             return encodedFile;
         }
 
+        //Builds an encoded .hct file from the text file
         public EncodedFile encodeFile() {
             char[] charset = getCharset();
             int[] weights = getCharFrequencies(charset);
