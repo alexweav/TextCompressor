@@ -66,7 +66,7 @@ namespace TextCompressor {
             byte huffmanDataLength = file[0];
             int fileStartIndex = huffmanDataLength + 1;
             HuffmanTree tree = getTreeFromFile(file, huffmanDataLength);
-            Dictionary<HuffmanCode, char> codeTable = getCodeDictionary(tree);
+            Dictionary<BinarySequence, char> codeTable = getCodeDictionary(tree);
             byte[] textData = new byte[file.Length - huffmanDataLength - 1];
             Array.Copy(file, fileStartIndex, textData, 0, textData.Length);
             string text = getText(new BinaryStream(textData), codeTable);
@@ -96,8 +96,8 @@ namespace TextCompressor {
             return table;
         }*/
         //TODO: Complete. Requires a new tree.getHuffmanCode() function
-        private Dictionary<HuffmanCode, char> getCodeDictionary(HuffmanTree tree) {
-            Dictionary<HuffmanCode, char> table = new Dictionary<HuffmanCode, char>();
+        private Dictionary<BinarySequence, char> getCodeDictionary(HuffmanTree tree) {
+            Dictionary<BinarySequence, char> table = new Dictionary<BinarySequence, char>();
             char[] charset = tree.getCharset();
             for (int i = 0; i < charset.Length; ++i) {
                 try {
@@ -136,14 +136,14 @@ namespace TextCompressor {
 
         //TODO: Complete. Requires a new code dictionary item in this.getCodeDictionary()
         //and this.decodeFile()
-        private string getText(BinaryStream textData, Dictionary<HuffmanCode, char> table) {
+        private string getText(BinaryStream textData, Dictionary<BinarySequence, char> table) {
             string text = "";
-            HuffmanCode code = new HuffmanCode();
+            BinarySequence code = new BinarySequence();
             char resultChar;
             while (!textData.isEndOfStream()) {
                 if (table.TryGetValue(code, out resultChar)) {
                     text += resultChar;
-                    code = new HuffmanCode();
+                    code = new BinarySequence();
                 } else {
                     code.concatenate(textData.readBit());
                 }

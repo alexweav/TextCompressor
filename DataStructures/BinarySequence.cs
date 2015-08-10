@@ -5,18 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 
-namespace TextCompressor {
-    public class HuffmanCode {
+namespace DataStructures {
+    public class BinarySequence {
 
         private BigInteger data;
         private byte bitLength;
 
-        public HuffmanCode() {
+        public BinarySequence() {
             this.bitLength = 0;
             data = new BigInteger(0);
         }
 
-        public HuffmanCode(string binary) {
+        public BinarySequence(string binary) {
             if (binary == "") {
                 throw new ArgumentException("Empty binary string cannot be constructed.");
             }
@@ -55,7 +55,7 @@ namespace TextCompressor {
             ++bitLength;
         }
 
-        public Boolean isEqual(HuffmanCode code) {
+        public Boolean isEqual(BinarySequence code) {
             if (this.bitLength == 0) {
                 return code.getLength() == 0;
             } else {

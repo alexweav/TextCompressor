@@ -76,13 +76,13 @@ namespace TextCompressor {
             }
         }*/
 
-        public HuffmanCode getHuffmanCode(char symbol) {
+        public BinarySequence getHuffmanCode(char symbol) {
             if (!getCharset().Contains(symbol)) {
                 return null;
             }
             HuffmanTreeNode currentNode = head;
             string strSymbol = "" + symbol;
-            HuffmanCode code = new HuffmanCode();
+            BinarySequence code = new BinarySequence();
             while (true) {
                 if (currentNode.Charset.Equals(strSymbol)) {
                     return code;
@@ -133,9 +133,9 @@ namespace TextCompressor {
 
         //Given an array of characters, retrieves the corresponding encoded binary strings in an array
         //The nth string of the output is the encoded form of the nth character of the input
-        public HuffmanCode[] getCodes(char[] charset) {
+        public BinarySequence[] getCodes(char[] charset) {
             int len = charset.Length;
-            HuffmanCode[] codes = new HuffmanCode[len];
+            BinarySequence[] codes = new BinarySequence[len];
             for (int i = 0; i < len; i++) {
                 codes[i] = getHuffmanCode(charset[i]);
             }

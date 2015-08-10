@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using DataStructures;
+
 namespace TextCompressor {
     class TextFile {
 
@@ -90,7 +92,7 @@ namespace TextCompressor {
 
         //Encodes the text file with specified character-code lookup tables
         //Returns the encoded file in the form of a binary string
-        private string encodeToString(char[] chars, HuffmanCode[] codes) {
+        private string encodeToString(char[] chars, BinarySequence[] codes) {
             string file = readFile();
             string encodedFile = "";
             for (int i = 0; i < file.Length; i++) {
@@ -107,7 +109,7 @@ namespace TextCompressor {
             char[] charset = getCharset();
             int[] weights = getCharFrequencies(charset);
             HuffmanTree tree = new HuffmanTree(charset, weights);
-            HuffmanCode[] codes = tree.getCodes(charset);
+            BinarySequence[] codes = tree.getCodes(charset);
             string encoded = encodeToString(charset, codes);
             string huffmanData = tree.getBinaryRepresentation();
             EncodedFile enf = new EncodedFile("C:\\Users\\Owner\\Documents\\encodedTEST.hct", EncodedFile.CREATE_NEW); //get fp from user
