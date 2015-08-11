@@ -113,7 +113,14 @@ namespace DataStructures {
 
         //Appends the given BinarySequence to the end of the current BinarySequence
         public void Append(BinarySequence seq) {
-
+            string seqStr = seq.ToString();
+            for (int i = 0; i < seqStr.Length; ++i) {
+                if (seqStr[i] == 48) {
+                    concatenate(0);
+                } else if (seqStr[i] == 49) {
+                    concatenate(1);
+                }
+            }
         }
 
         
