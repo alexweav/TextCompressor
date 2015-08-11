@@ -95,6 +95,7 @@ namespace DataStructures {
             }
         }
 
+        //Returns the BinarySequence in the form of a string of 1 and 0 characters
         public override string ToString() {
             string output = "";
             for (int i = 0; i < bitLength; ++i) {
@@ -108,6 +109,11 @@ namespace DataStructures {
                 }
             }
             return output;
+        }
+
+        //Appends the given BinarySequence to the end of the current BinarySequence
+        public void Append(BinarySequence seq) {
+
         }
 
         

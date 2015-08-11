@@ -181,6 +181,14 @@ namespace TextCompressor {
             currentNode.Charset = leftCharset + rightCharset;
         }
 
+        public Dictionary<char, BinarySequence> getEncodingTable(char[] charset) {
+            Dictionary<char, BinarySequence> table = new Dictionary<char, BinarySequence>();
+            for (int i = 0; i < charset.Length; ++i) {
+                table.Add(charset[i], getHuffmanCode(charset[i]));
+            }
+            return table;
+        }
+
 
     }
 }

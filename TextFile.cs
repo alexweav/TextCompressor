@@ -104,16 +104,25 @@ namespace TextCompressor {
             return encodedFile;
         }
 
+        private BinarySequence encodeToBinary(char[] chars, Dictionary<char, BinarySequence> table) {
+            string file = readFile();
+            BinarySequence encodedFile = new BinarySequence();
+            for (int i = 0; i < file.Length; ++i) {
+                //TODO: Append translation sequence to end of encoded file sequence
+            }
+            return encodedFile;
+        }
+
         //Builds an encoded .hct file from the text file
         public EncodedFile encodeFile() {
             char[] charset = getCharset();
             int[] weights = getCharFrequencies(charset);
             HuffmanTree tree = new HuffmanTree(charset, weights);
-            BinarySequence[] codes = tree.getCodes(charset);
-            string encoded = encodeToString(charset, codes);
+            Dictionary<char, BinarySequence> codeTable = tree.getEncodingTable(charset);
+            BinarySequence encoded = encodeToBinary(charset, codeTable);
             string huffmanData = tree.getBinaryRepresentation();
             EncodedFile enf = new EncodedFile("C:\\Users\\Owner\\Documents\\encodedTEST.hct", EncodedFile.CREATE_NEW); //get fp from user
-            writeEncodedFile(enf, huffmanData, encoded);
+            //writeEncodedFile(enf, huffmanData, encoded);
             return enf;
         }
 
