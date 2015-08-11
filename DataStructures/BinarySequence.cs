@@ -42,6 +42,8 @@ namespace DataStructures {
             }
         }
 
+        //Takes a byte b
+        //Constructs a BinarySequence of length 8 containing the binary data from the given byte
         public BinarySequence(byte b) {
             string str = "";
             for (int i = 0; i < 8; ++i) {
@@ -145,6 +147,32 @@ namespace DataStructures {
                     concatenate(1);
                 }
             }
+        }
+
+        //Returns the binary sequence in the form of a big-endian ordered byte array
+        //Leading zeros are added as needed to fill the largest byte completely.
+        public byte[] ToByteArray() {
+            if (bitLength == 0) {
+                return new byte[0];
+            }
+            int intendedLength = ByteLength();
+            byte[] raw = data.ToByteArray();
+            byte[] output = new byte[intendedLength];
+            int numZeroBytes = intendedLength - raw.Length;
+            for (int i = 0; i < raw.Length; ++i) {
+                output[i+numZeroBytes] = raw[raw.Length - 1 - i];
+            }
+
+            return output;
+        }
+
+        //Returns the length in bytes if this sequence were to be converted into a byte array
+        public int ByteLength() {
+            int len = bitLength / 8;
+            if (!(bitLength % 8 == 0)) {
+                ++len;
+            }
+            return len;
         }
 
         

@@ -90,21 +90,11 @@ namespace TextCompressor {
             return frequencies;
         }
 
-        //Encodes the text file with specified character-code lookup tables
-        //Returns the encoded file in the form of a binary string
-        private string encodeToString(char[] chars, BinarySequence[] codes) {
-            string file = readFile();
-            string encodedFile = "";
-            for (int i = 0; i < file.Length; i++) {
-                if (chars.Contains(file[i])) {
-                    int index = Array.IndexOf(chars, file[i]);
-                    encodedFile += codes[index];    //CHANGE THIS, SHOULD += BINARY DATA OF codes[index] 
-                }
-            }
-            return encodedFile;
-        }
-
-        private BinarySequence encodeToBinary(char[] chars, Dictionary<char, BinarySequence> table) {
+        //Takes a dictionary mapping from characters to corresponding BinarySequences
+        //For any character, its corresponding BinarySequence is taken to be its Huffman Code
+        //Constructs a large BinarySequence which is the encoded version of this text file
+        //Returns the encoded BinarySequence
+        private BinarySequence encodeToBinary(Dictionary<char, BinarySequence> table) {
             string file = readFile();
             BinarySequence encodedFile = new BinarySequence();
             for (int i = 0; i < file.Length; ++i) {
@@ -124,64 +114,35 @@ namespace TextCompressor {
             int[] weights = getCharFrequencies(charset);
             HuffmanTree tree = new HuffmanTree(charset, weights);
             Dictionary<char, BinarySequence> codeTable = tree.getEncodingTable(charset);
-            BinarySequence encoded = encodeToBinary(charset, codeTable);
+            BinarySequence encoded = encodeToBinary(codeTable);
             BinarySequence huffmanData = tree.getBinaryRepresentation();
             EncodedFile enf = new EncodedFile("C:\\Users\\Owner\\Documents\\encodedTEST.hct", EncodedFile.CREATE_NEW); //get fp from user
             writeEncodedFile(enf, huffmanData, encoded);
             return enf;
         }
 
-        private void writeEncodedFile(EncodedFile enf, string huffmanData, string body) {
-            BinaryWriter writer = new BinaryWriter(File.Open(enf.Filepath, FileMode.Create));
-            writeBinaryString(huffmanData, writer, true);
-            writeBinaryString(body, writer, false);
-        }
-
+        //Given a particular encoded file, huffman data string, and message body
+        //Writes the huffman data and message to the encoded file with the proper formatting
         private void writeEncodedFile(EncodedFile enf, BinarySequence huffmanData, BinarySequence body) {
             BinaryWriter writer = new BinaryWriter(File.Open(enf.Filepath, FileMode.Create));
-            //TODO: complete
+            writeBinarySequence(huffmanData, writer, true);
+            writeBinarySequence(body, writer, false);
         }
 
-        //Given a huffman data string, writes the length of the string followed by the string itself to the encoded file
-        //If the string's length is not an even multiple of 8 bytes, zeros are appended to the end appropriately
-        private void writeBinaryString(string data, BinaryWriter writer, Boolean writeLength) {
-            string[] groupedData = groupString(data, BYTE_LENGTH);
-            byte length = (byte)groupedData.Length;
+        //Given a sequence of binary data in the form of a BinarySequence, a writer, and a writeLength boolean
+        //Writes the binary data, padded to the *right* with zeros, to the writer
+        //If writeLength is true, the data is preceded by an unsigned byte value which represents the length of the data in bytes
+        private void writeBinarySequence(BinarySequence data, BinaryWriter writer, Boolean writeLength) {
+            int dataLength = data.getLength();
+            int numExtraZeros = dataLength % 8;
+            for (int i = 0; i < numExtraZeros; ++i) {
+                data.concatenate(0);
+            }
+            byte[] dataBytes = data.ToByteArray();
             if (writeLength) {
-                writer.Write(length);
+                writer.Write((byte)(dataBytes.Length));
             }
-            int lastLength = groupedData[length - 1].Length;
-            for (int i = 0; i < 8 - lastLength; i++) {
-                groupedData[length - 1] += "0";
-            }
-            byte[] bytes = new byte[groupedData.Length];
-            for (int i = 0; i < groupedData.Length; ++i) {
-                bytes[i] = Convert.ToByte(groupedData[i], 2);
-            }
-            writer.Write(bytes);
-        }
-
-        //Splits a string st into a string array, each element of at most size groupSize
-        //If the length of st is not divisible by groupSize, the final element of the string array is sized appropriately
-        private string[] groupString(string st, int groupSize) {
-            int length = st.Length;
-            int numGroups;
-            if (length % groupSize == 0) {
-                numGroups = length / groupSize;
-            }
-            else {
-                numGroups = length / groupSize + 1;
-            }
-            string[] groups = new string[numGroups];
-            for (int i = 0; i < numGroups; ++i) {
-                if (i != numGroups - 1) {
-                    groups[i] = st.Substring(groupSize * i, groupSize);
-                }
-                else {
-                    groups[i] = st.Substring(groupSize * i);
-                }
-            }
-            return groups;
+            writer.Write(dataBytes);
         }
     }
 }
