@@ -108,7 +108,12 @@ namespace TextCompressor {
             string file = readFile();
             BinarySequence encodedFile = new BinarySequence();
             for (int i = 0; i < file.Length; ++i) {
-                //TODO: Append translation sequence to end of encoded file sequence
+                BinarySequence encodedChar = new BinarySequence();
+                if (table.TryGetValue(file[i], out encodedChar)) {
+                    encodedFile.Append(encodedChar);
+                } else {
+                    throw new ArgumentException("Unrecognized char, something has gone wrong.");
+                }
             }
             return encodedFile;
         }
@@ -120,9 +125,9 @@ namespace TextCompressor {
             HuffmanTree tree = new HuffmanTree(charset, weights);
             Dictionary<char, BinarySequence> codeTable = tree.getEncodingTable(charset);
             BinarySequence encoded = encodeToBinary(charset, codeTable);
-            string huffmanData = tree.getBinaryRepresentation();
+            BinarySequence huffmanData = tree.getBinaryRepresentation();
             EncodedFile enf = new EncodedFile("C:\\Users\\Owner\\Documents\\encodedTEST.hct", EncodedFile.CREATE_NEW); //get fp from user
-            //writeEncodedFile(enf, huffmanData, encoded);
+            writeEncodedFile(enf, huffmanData, encoded);
             return enf;
         }
 
@@ -130,6 +135,11 @@ namespace TextCompressor {
             BinaryWriter writer = new BinaryWriter(File.Open(enf.Filepath, FileMode.Create));
             writeBinaryString(huffmanData, writer, true);
             writeBinaryString(body, writer, false);
+        }
+
+        private void writeEncodedFile(EncodedFile enf, BinarySequence huffmanData, BinarySequence body) {
+            BinaryWriter writer = new BinaryWriter(File.Open(enf.Filepath, FileMode.Create));
+            //TODO: complete
         }
 
         //Given a huffman data string, writes the length of the string followed by the string itself to the encoded file

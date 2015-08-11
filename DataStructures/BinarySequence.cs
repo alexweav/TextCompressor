@@ -42,6 +42,30 @@ namespace DataStructures {
             }
         }
 
+        public BinarySequence(byte b) {
+            string str = "";
+            for (int i = 0; i < 8; ++i) {
+                if (isEven(b)) {
+                    str = "0" + str;
+                    b = (byte)(b / 2);
+                } else {
+                    str = "1" + str;
+                    b = (byte)(--b / 2);
+                }
+            }
+            for (int i = 0; i < 8; ++i) {
+                if (str[i] == 48) {
+                    concatenate(0);
+                } else if (str[i] == 49) {
+                    concatenate(1);
+                }
+            }
+        }
+
+        private Boolean isEven(byte b) {
+            return b % 2 == 0;
+        }
+
         //Returns the bit-length of the BinarySequence
         public byte getLength() {
             return bitLength;

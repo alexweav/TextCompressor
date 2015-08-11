@@ -106,7 +106,7 @@ namespace TextCompressor {
         //           If 0, decode left and right child nodes the same way, then return a new node with those children but no value
         //algorithm in better detail: http://stackoverflow.com/questions/759707/efficient-way-of-storing-huffman-tree
         //After reconstruction, empty nodes must be filled with correct charsets in order to make the tree traversable
-        public string getBinaryRepresentation() {
+        public string getBinaryRepresentation_s() {
             return buildBinaryString(head);
         }
 
@@ -123,6 +123,31 @@ namespace TextCompressor {
                 return "1" + binary;
             } else {
                 return "0" + buildBinaryString(currentNode.Left) + buildBinaryString(currentNode.Right);
+            }
+        }
+
+        public BinarySequence getBinaryRepresentation() {
+            return buildBinarySequence(head);
+        }
+
+        private BinarySequence buildBinarySequence(HuffmanTreeNode currentNode) {
+            if (currentNode == null) {
+                return new BinarySequence();
+            }
+            if (isLeaf(currentNode)) {
+                byte[] bytes = Encoding.ASCII.GetBytes(currentNode.Charset);
+                byte charValue = bytes[0];
+                BinarySequence charBinary = new BinarySequence(charValue);
+                BinarySequence b = new BinarySequence("1");
+                b.Append(charBinary);
+                return b;
+            } else {
+                BinarySequence b = new BinarySequence("0");
+                BinarySequence s1 = buildBinarySequence(currentNode.Left);
+                BinarySequence s2 = buildBinarySequence(currentNode.Right);
+                b.Append(s1);
+                b.Append(s2);
+                return b;
             }
         }
 
