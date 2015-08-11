@@ -95,6 +95,21 @@ namespace DataStructures {
             }
         }
 
+        public override string ToString() {
+            string output = "";
+            for (int i = 0; i < bitLength; ++i) {
+                if (data.IsEven) {
+                    data = BigInteger.Divide(data, new BigInteger(2));
+                    output = "0" + output;
+                } else {
+                    data = BigInteger.Subtract(data, new BigInteger(1));
+                    data = BigInteger.Divide(data, new BigInteger(2));
+                    output = "1" + output;
+                }
+            }
+            return output;
+        }
+
         
 
         
