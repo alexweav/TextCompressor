@@ -4,7 +4,7 @@ using TextCompressor;
 
 using DataStructures;
 
-namespace TextCompressor_Test {
+namespace DataStructures_Test {
     [TestClass]
     public class BinarySequence_Test {
 
