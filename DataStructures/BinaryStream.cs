@@ -10,7 +10,7 @@ namespace DataStructures {
     //Functions like an input stream, starting from the beginning of the data
     //Reads individual bits or entire bytes, advancing along the stream in a *forward only* direction until the stream ends
     //Bit and byte reading ignores byte boundaries in the given data
-    class BinaryStream {
+    public class BinaryStream {
         private const int BYTE_LENGTH = 8;
 
         private byte[] data;
