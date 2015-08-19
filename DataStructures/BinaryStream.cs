@@ -20,7 +20,10 @@ namespace DataStructures {
 
         #region constructors
         public BinaryStream() {
-
+            data = new byte[0];
+            bitIndex = 0;
+            byteIndex = 0;
+            endOfStream = true;
         }
 
         public BinaryStream(byte[] data) {
