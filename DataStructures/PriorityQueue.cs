@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DataStructures {
-    class PriorityQueue<T> {
+    public class PriorityQueue<T> {
 
         private List<PriorityQueueNode<T>> data;
 
@@ -32,23 +32,23 @@ namespace DataStructures {
 
         //Removes the element with the highest priority in the queue, returns that element
         public T dequeueLowest() {
-            if (!isEmpty()) {
-                T output = data[0].Data;
-                data.RemoveAt(0);
-                return output;
+            if (isEmpty()) {
+                throw new InvalidOperationException("Cannot dequeue from an empty queue.");
             }
-            return default(T);
+            T output = data[0].Data;
+            data.RemoveAt(0);
+            return output;
         }
 
         //Removes the element with the lowest priority in the queue, returns that element
         public T dequeueHighest() {
-            if (!isEmpty()) {
-                int len = this.data.Count;
-                T output = data[len - 1].Data;
-                data.RemoveAt(len - 1);
-                return output;
+            if (isEmpty()) {
+                throw new InvalidOperationException("Cannot dequeue from an empty queue.");
             }
-            return default(T);
+            int len = this.data.Count;
+            T output = data[len - 1].Data;
+            data.RemoveAt(len - 1);
+            return output;
         }
 
         //Returns the element with the highest priority in the queue, without removing it
