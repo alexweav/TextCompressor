@@ -53,36 +53,36 @@ namespace DataStructures {
 
         //Returns the element with the highest priority in the queue, without removing it
         public T readHighest() {
-            if (!isEmpty()) {
-                int len = this.data.Count;
-                return data[len - 1].Data;
+            if (isEmpty()) {
+                throw new InvalidOperationException("Cannot read highest of an empty queue.");
             }
-            return default(T);
+            int len = this.data.Count;
+            return data[len - 1].Data;
         }
 
         //Returns the element with the lowest priority in the queue, without removing it
         public T readLowest() {
-            if (!isEmpty()) {
-                return data[0].Data;
+            if (isEmpty()) {
+                throw new InvalidOperationException("Cannot read lowest of an empty queue.");
             }
-            return default(T);
+            return data[0].Data;
         }
 
         //Returns the priority of the highest priority element in the queue
         public int highestPriority() {
-            if (!isEmpty()) {
-                int len = this.data.Count;
-                return data[len - 1].Priority;
+            if (isEmpty()) {
+                throw new InvalidOperationException("Cannot take the highest priority of an empty queue.");
             }
-            return 0;
+            int len = this.data.Count;
+            return data[len - 1].Priority;
         }
 
         //Returns the priority of the lowest priority element in the queue
         public int lowestPriority() {
-            if (!isEmpty()) {
-                return data[0].Priority;
+            if (isEmpty()) {
+                throw new InvalidOperationException("Cannot take the lowest priority of an empty queue.");
             }
-            return 0;
+            return data[0].Priority;
         }
         
         //Returns whether the queue is empty or not
