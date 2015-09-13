@@ -65,10 +65,10 @@ namespace DataStructures {
                 byte bit;
                 try {
                     bit = readBit();
-                } catch (Exception) {
+                } catch (IndexOutOfRangeException) {
                     byteIndex = initialByteIndex;
                     bitIndex = initialBitIndex;
-                    throw new IndexOutOfRangeException("Stream has ended.");
+                    throw new IndexOutOfRangeException("Stream will end before entire byte is read.");
                 }
                 bit = (byte)(bit << 7-i);
                 output = (byte)(output | bit);
@@ -93,6 +93,9 @@ namespace DataStructures {
         //of the data array
         //Does not advance the pointers
         private byte getCurrentBit() {
+            if (isEndOfStream()) {
+                throw new IndexOutOfRangeException("Binary stream has ended or is empty.");
+            }
             byte andBuffer = (byte)(128 >> bitIndex);
             byte res = (byte)(data[byteIndex] & andBuffer);
             if (res == 0) {
