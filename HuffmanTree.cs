@@ -8,7 +8,7 @@ using System.IO;
 using DataStructures;
 
 namespace TextCompressor {
-    class HuffmanTree {
+    public class HuffmanTree {
 
         private PriorityQueue<HuffmanTreeNode> topNodes;
 
@@ -16,6 +16,9 @@ namespace TextCompressor {
 
         //constructor
         public HuffmanTree(char[] charset, int[] weights) {
+            if (charset.Length != weights.Length) {
+                throw new ArgumentException("Must be an equal number of characters and frequencies.");
+            }
             populateQueue(charset, weights);
             buildHuffmanTree();
         }
