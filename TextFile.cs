@@ -113,7 +113,7 @@ namespace TextCompressor {
             char[] charset = getCharset();
             int[] weights = getCharFrequencies(charset);
             HuffmanTree tree = new HuffmanTree(charset, weights);
-            Dictionary<char, BinarySequence> codeTable = tree.getEncodingTable(charset);
+            Dictionary<char, BinarySequence> codeTable = tree.getEncodingTable();
             BinarySequence encoded = encodeToBinary(codeTable);
             BinarySequence huffmanData = tree.getBinaryRepresentation();
             EncodedFile enf = new EncodedFile("C:\\Users\\Owner\\Documents\\encodedTEST.hct", EncodedFile.CREATE_NEW); //get fp from user

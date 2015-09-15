@@ -93,7 +93,7 @@ namespace TextCompressor {
         //Writes the huffman tree to a binary string using the following algorithm:
         //For each node, starting at root:
         //If leaf node, output 1 + char
-        //If not leaf node, output 0, and keep traversing
+        //If not leaf node, output 0, and keep traversing in postorder
         //To read:
         //Read bit.  If 1, then read the character, then return a new leaf node
         //           If 0, decode left and right child nodes the same way, then return a new node with those children but no value
@@ -119,10 +119,12 @@ namespace TextCompressor {
             }
         }
 
+        //Similar to getBinaryRepresentation_s(), but returns the binary in the form of a BinarySequence rather than a string
         public BinarySequence getBinaryRepresentation() {
             return buildBinarySequence(head);
         }
 
+        //BinarySequence based parallel to buildBinaryString(node)
         private BinarySequence buildBinarySequence(HuffmanTreeNode currentNode) {
             if (currentNode == null) {
                 return new BinarySequence();
@@ -155,7 +157,11 @@ namespace TextCompressor {
             int len = charset.Length;
             BinarySequence[] codes = new BinarySequence[len];
             for (int i = 0; i < len; i++) {
-                codes[i] = getHuffmanCode(charset[i]);
+                try {
+                    codes[i] = getHuffmanCode(charset[i]);
+                } catch (ArgumentException) {
+                    throw new ArgumentException("A character was found in the given charset that is not in this Huffman tree.");
+                }
             }
             return codes;
         }
@@ -185,7 +191,10 @@ namespace TextCompressor {
             return Encoding.ASCII.GetString(ch);
         }
 
-
+        //When a tree is constructed from binary string data, the charsets of any non-leaf node are empty string rather than 
+        //the collected charsets of all its descendants. 
+        //Non-leaf nodes need to have charsets so that the tree is quickly searchable
+        //This populates all such nodes with their proper charsets and fixes the problem
         private void populateSearchStrings(HuffmanTreeNode currentNode) {
             string leftCharset = currentNode.Left.Charset;
             string rightCharset = currentNode.Right.Charset;
@@ -200,7 +209,9 @@ namespace TextCompressor {
             currentNode.Charset = leftCharset + rightCharset;
         }
 
-        public Dictionary<char, BinarySequence> getEncodingTable(char[] charset) {
+        //Returns a dictionary which maps every char in the tree's charset to its corresponding code in the form of a BinarySequence
+        public Dictionary<char, BinarySequence> getEncodingTable() {
+            char[] charset = getCharset();
             Dictionary<char, BinarySequence> table = new Dictionary<char, BinarySequence>();
             for (int i = 0; i < charset.Length; ++i) {
                 table.Add(charset[i], getHuffmanCode(charset[i]));

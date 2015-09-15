@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TextCompressor;
+using DataStructures;
 
 namespace TextCompressor_Test {
     [TestClass]
@@ -155,9 +156,82 @@ namespace TextCompressor_Test {
 
 #region getCodes_test
 
+        [TestMethod]
+        public void GetCodes_EmptyCharset_GivesNoCodes() {
+            char[] charset = { };
+            int[] weights = { };
+            HuffmanTree t = new HuffmanTree(charset, weights);
+            Assert.AreEqual(0, t.getCodes(charset).Length);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetCodes_InvalidCharset_ThrowsArgumentException() {
+            char[] charset = { 'A', 'B' };
+            int[] weights = { 1, 2 };
+            HuffmanTree t = new HuffmanTree(charset, weights);
+            char[] invalid = { 'A', 'B', 'C' };
+            t.getCodes(invalid);
+        }
+
+        [TestMethod]
+        public void GetCodes_ValidCharset_CorrectCodes1() {
+            char[] charset = { 'A', 'B', 'C', 'D', 'E' };
+            int[] weights = { 3, 1, 2, 7, 5 };
+            HuffmanTree t = new HuffmanTree(charset, weights);
+            BinarySequence[] codes = t.getCodes(charset);
+            Assert.AreEqual("111", codes[0].ToString());
+            Assert.AreEqual("1100", codes[1].ToString());
+            Assert.AreEqual("1101", codes[2].ToString());
+            Assert.AreEqual("0", codes[3].ToString());
+            Assert.AreEqual("10", codes[4].ToString());
+        }
+
+        [TestMethod]
+        public void GetCodes_ValidCharset_CorrectCodes2() {
+            char[] charset = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
+            int[] weights = { 27, 16, 8, 1, 190, 53, 54, 6 };
+            HuffmanTree t = new HuffmanTree(charset, weights);
+            BinarySequence[] codes = t.getCodes(charset);
+            Assert.AreEqual("000", codes[0].ToString());
+            Assert.AreEqual("0011", codes[1].ToString());
+            Assert.AreEqual("00101", codes[2].ToString());
+            Assert.AreEqual("001000", codes[3].ToString());
+            Assert.AreEqual("1", codes[4].ToString());
+            Assert.AreEqual("010", codes[5].ToString());
+            Assert.AreEqual("011", codes[6].ToString());
+            Assert.AreEqual("001001", codes[7].ToString());
+        }
+
 #endregion
 
 #region getEncodingTable_test
+
+        [TestMethod]
+        public void GetEncodingTable_EmptyTree_EmptyTable() {
+            char[] charset = { };
+            int[] weights = { };
+            HuffmanTree t = new HuffmanTree(charset, weights);
+            Dictionary<char, BinarySequence> d = t.getEncodingTable();
+            Assert.AreEqual(0, d.Count);
+        }
+
+        [TestMethod]
+        public void GetEncodingTable_ValidTree_CorrectTable() {
+            char[] charset = { 'A', 'B', 'C' };
+            int[] weights = { 2, 1, 3 };
+            HuffmanTree t = new HuffmanTree(charset, weights);
+            Dictionary<char, BinarySequence> d = t.getEncodingTable();
+            BinarySequence v1 = new BinarySequence();
+            BinarySequence v2 = new BinarySequence();
+            BinarySequence v3 = new BinarySequence();
+            d.TryGetValue('A', out v1);
+            d.TryGetValue('B', out v2);
+            d.TryGetValue('C', out v3);
+            Assert.AreEqual("01", v1.ToString());
+            Assert.AreEqual("00", v2.ToString());
+            Assert.AreEqual("1", v3.ToString());
+        }
 
 #endregion
     }
