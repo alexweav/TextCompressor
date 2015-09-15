@@ -39,49 +39,39 @@ namespace TextCompressor {
 
         //constructs a huffman tree from a priority queue of characters
         private void buildHuffmanTree() {
-            while (topNodes.length() > 1) {
-                int node1Priority = topNodes.lowestPriority();
-                HuffmanTreeNode node1 = topNodes.dequeueLowest();
-                int node2Priority = topNodes.lowestPriority();
-                HuffmanTreeNode node2 = topNodes.dequeueLowest();
-                HuffmanTreeNode newNode = new HuffmanTreeNode(node1.Charset + node2.Charset, node1, node2);
-                topNodes.enqueue(newNode, node1Priority + node2Priority);
+            try {
+                while (topNodes.length() > 1) {
+                    int node1Priority = topNodes.lowestPriority();
+                    HuffmanTreeNode node1 = topNodes.dequeueLowest();
+                    int node2Priority = topNodes.lowestPriority();
+                    HuffmanTreeNode node2 = topNodes.dequeueLowest();
+                    HuffmanTreeNode newNode = new HuffmanTreeNode(node1.Charset + node2.Charset, node1, node2);
+                    topNodes.enqueue(newNode, node1Priority + node2Priority);
+                }
+                head = topNodes.dequeueHighest();
+            } catch (InvalidOperationException) {
+                head = null;
             }
-            head = topNodes.dequeueHighest();
         }
 
         //Returns an array of all chars stored in the huffman tree
         public char[] getCharset() {
+            if (head == null) {
+                return new char[0];
+            }
             string charString = head.Charset;
             return charString.ToCharArray();
         }
 
         //Traverses the huffman tree and obtains the huffman code for a given character
-        //Returns null if the char does not exist in the tree
-        /*public string getHuffmanCode(char symbol) {
-            if(!getCharset().Contains(symbol)) {
-                return null;
-            }
-            HuffmanTreeNode currentNode = head;
-            string strSymbol = "" + symbol;
-            string code = "";
-            while (true) {
-                if (currentNode.Charset.Equals(strSymbol)) {
-                    return code;
-                }
-                if (currentNode.Left.Charset.Contains(symbol)) {    //traverse left
-                    code += "0";
-                    currentNode = currentNode.Left;
-                } else {    //traverse right
-                    code += "1";
-                    currentNode = currentNode.Right;
-                }
-            }
-        }*/
-
         public BinarySequence getHuffmanCode(char symbol) {
             if (!getCharset().Contains(symbol)) {
-                return null;
+                throw new ArgumentException("That symbol is not a member of the given charset of this Huffman tree.");
+            }
+            if (getCharset().Length == 1) {
+                BinarySequence c = new BinarySequence();
+                c.concatenate(1);
+                return c;
             }
             HuffmanTreeNode currentNode = head;
             string strSymbol = "" + symbol;
@@ -183,6 +173,7 @@ namespace TextCompressor {
             }
         }
 
+        //Reads a single ASCII character from the given binary stream and returns it in a string
         private string getASCIIChar(BinaryStream stream) {
             byte bCh = 0;
             for (int i = 1; i < 8; ++i) {
