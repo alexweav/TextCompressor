@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using DataStructures;
 
 namespace TextCompressor {
-    class EncodedFile {
+    public class EncodedFile {
 
         private string filepath;
 
