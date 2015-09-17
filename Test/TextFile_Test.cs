@@ -59,12 +59,143 @@ namespace TextCompressor_Test {
             }
             file.Filepath = newFilepath;
             Assert.AreEqual(newFilepath, file.Filepath);
+            System.IO.File.Delete(filepath);
+            System.IO.File.Delete(newFilepath);
+
         }
 
         #endregion
 
-        #region read_write_test
+        #region Read_Write_test
 
+        [TestMethod]
+        public void ReadWrite_BlankFile_ReadEmpty() {
+            var validPathStart = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "TextCompressor");
+            string filepath = Path.Combine(validPathStart, "TextCompressor_TextFile_Test.txt");
+            if (!File.Exists(filepath)) {
+                System.IO.File.Create(filepath).Close();
+            }
+            TextFile file = new TextFile(filepath);
+            Assert.AreEqual("", file.readFile());
+            System.IO.File.Delete(filepath);
+        }
+
+        [TestMethod]
+        public void ReadWrite_ValidText_ReadsText1() {
+            var validPathStart = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "TextCompressor");
+            string filepath = Path.Combine(validPathStart, "TextCompressor_TextFile_Test.txt");
+            if (!File.Exists(filepath)) {
+                System.IO.File.Create(filepath).Close();
+            }
+            TextFile file = new TextFile(filepath);
+            string text = "This is a test file.\nThis is a new line.";
+            file.writeText(text);
+            Assert.AreEqual(text, file.readFile());
+            System.IO.File.Delete(filepath);
+        }
+
+        [TestMethod]
+        public void ReadWrite_ValidText_ReadsText2() {
+            var validPathStart = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "TextCompressor");
+            string filepath = Path.Combine(validPathStart, "TextCompressor_TextFile_Test.txt");
+            if (!File.Exists(filepath)) {
+                System.IO.File.Create(filepath).Close();
+            }
+            TextFile file = new TextFile(filepath);
+            string text = "\n\n\n\n\n";
+            file.writeText(text);
+            Assert.AreEqual(text, file.readFile());
+            System.IO.File.Delete(filepath);
+        }
+
+        #endregion
+
+        #region GetCharset_test
+
+        [TestMethod]
+        public void GetCharset_EmptyFile_EmptyCharset() {
+            var validPathStart = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "TextCompressor");
+            string filepath = Path.Combine(validPathStart, "TextCompressor_TextFile_Test.txt");
+            if (!File.Exists(filepath)) {
+                System.IO.File.Create(filepath).Close();
+            }
+            TextFile file = new TextFile(filepath);
+            Assert.AreEqual(0, file.getCharset().Length);
+            System.IO.File.Delete(filepath);
+        }
+
+        [TestMethod]
+        public void GetCharset_ValidFile_CorrectCharset() {
+            var validPathStart = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "TextCompressor");
+            string filepath = Path.Combine(validPathStart, "TextCompressor_TextFile_Test.txt");
+            if (!File.Exists(filepath)) {
+                System.IO.File.Create(filepath).Close();
+            }
+            TextFile file = new TextFile(filepath);
+            string text = "Test charset.\nNewline.";
+            file.writeText(text);
+            char[] expected = { 'T', 'e', 's', 't', ' ', 'c', 'h', 'a', 'r', '.', '\n', 'N', 'w', 'l', 'i', 'n' };
+            Assert.AreEqual(expected.Length, file.getCharset().Length);
+            for (int i = 0; i < file.getCharset().Length; ++i) {
+                Assert.AreEqual(expected[i], file.getCharset()[i]);
+            }
+            System.IO.File.Delete(filepath);
+        }
+
+        #endregion
+
+        #region GetFrequencies_test
+        [TestMethod]
+        public void GetFrequencies_EmptyFile_ZeroFrequencies() {
+            var validPathStart = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "TextCompressor");
+            string filepath = Path.Combine(validPathStart, "TextCompressor_TextFile_Test.txt");
+            if (!File.Exists(filepath)) {
+                System.IO.File.Create(filepath).Close();
+            }
+            TextFile file = new TextFile(filepath);
+            char[] chars = { 'a', 'b', 'c', 'd', 'e' };
+            int[] frequencies = file.getCharFrequencies(chars);
+            for (int i = 0; i < frequencies.Length; ++i) {
+                Assert.AreEqual(0, frequencies[i]);
+            }
+            System.IO.File.Delete(filepath);
+        }
+
+        [TestMethod]
+        public void GetFrequencies_ValidFile_NonexistantCharsZeroFrequencies() {
+            var validPathStart = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "TextCompressor");
+            string filepath = Path.Combine(validPathStart, "TextCompressor_TextFile_Test.txt");
+            if (!File.Exists(filepath)) {
+                System.IO.File.Create(filepath).Close();
+            }
+            TextFile file = new TextFile(filepath);
+            file.writeText("This DoEsn't hAvE Any lowErCAsE A, B, C, D, or Es in it.");
+            char[] chars = { 'a', 'b', 'c', 'd', 'e' };
+            int[] frequencies = file.getCharFrequencies(chars);
+            for (int i = 0; i < frequencies.Length; ++i) {
+                Assert.AreEqual(0, frequencies[i]);
+            }
+            System.IO.File.Delete(filepath);
+        }
+
+        [TestMethod]
+        public void GetFrequencies_ValidFile_CorrectFrequencies() {
+            var validPathStart = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "TextCompressor");
+            string filepath = Path.Combine(validPathStart, "TextCompressor_TextFile_Test.txt");
+            if (!File.Exists(filepath)) {
+                System.IO.File.Create(filepath).Close();
+            }
+            TextFile file = new TextFile(filepath);
+            file.writeText("I'm bad at inventing teststrings.");
+            char[] chars = { 'I', '\'', 'm', 'b', 'a', 'd', 't', 'i', 'n', 'v', 'e', 'g', 's', 'r' };
+            int[] expectedFrequencies = { 1, 1, 1, 1, 2, 1, 5, 3, 4, 1, 2, 2, 3, 1 };
+            int[] frequencies = file.getCharFrequencies(chars);
+            Assert.AreEqual(expectedFrequencies.Length, frequencies.Length);
+            for (int i = 0; i < frequencies.Length; ++i) {
+                Assert.AreEqual(expectedFrequencies[i], frequencies[i]);
+            }
+            System.IO.File.Delete(filepath);
+        }
         #endregion
 
     }

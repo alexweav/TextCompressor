@@ -43,16 +43,18 @@ namespace TextCompressor {
             return File.Exists(filepath);
         }
 
-        //Writes a set of lines to a text file.
-        public void writeLines(string[] lines) {
-            System.IO.File.WriteAllLines(this.filepath, lines);
+        //Writes the given text string to the text file.
+        public void writeText(string text) {
+            System.IO.File.WriteAllText(this.filepath, text);
         }
 
         //Reads the text file into a string.
         public string readFile() {
             try {
                 StreamReader reader = new StreamReader(this.filepath);
-                return reader.ReadToEnd();
+                string text = reader.ReadToEnd();
+                reader.Close();
+                return text;
             } catch (Exception) {
                 return null;
             }
