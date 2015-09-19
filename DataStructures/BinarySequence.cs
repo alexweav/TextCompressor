@@ -176,7 +176,21 @@ namespace DataStructures {
             return len;
         }
 
-        
+        public override bool Equals(object obj) {
+            //return base.Equals(obj);
+            if (obj == null) {
+                return false;
+            }
+            BinarySequence cast = obj as BinarySequence;
+            if ((System.Object)cast == null) {
+                return false;
+            }
+            return (cast.bitLength == this.bitLength) && (cast.ToString() == this.ToString());
+        }
+
+        public override int GetHashCode() {
+            return this.NumericValue() ^ this.bitLength;
+        }
 
         
     }
