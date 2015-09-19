@@ -222,10 +222,10 @@ namespace TextCompressor_Test {
                 System.IO.File.Create(filepath).Close();
             }
             TextFile file = new TextFile(filepath);
-            file.writeText("Mississippi river");
+            file.writeText("Mississippi River");
             string encodedFilepath = Path.Combine(validPathStart, "TextCompressor_EncodedFile_Test.hct");
             EncodedFile encoded = file.encodeFile(encodedFilepath);
-            Assert.AreEqual("Mississippi river", encoded.decodeFile());
+            Assert.AreEqual("Mississippi River", encoded.decodeFile());
             System.IO.File.Delete(filepath);
             System.IO.File.Delete(encodedFilepath);
         }

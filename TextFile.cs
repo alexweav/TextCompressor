@@ -128,7 +128,7 @@ namespace TextCompressor {
         private void writeEncodedFile(EncodedFile enf, BinarySequence huffmanData, BinarySequence body) {
             BinaryWriter writer = new BinaryWriter(File.Open(enf.Filepath, FileMode.Create));
             writeBinarySequence(huffmanData, writer, true);
-            writeBinarySequence(body, writer, true);
+            writeBinarySequence(body, writer, false);
             writer.Close();
         }
 

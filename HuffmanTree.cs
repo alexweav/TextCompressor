@@ -186,13 +186,13 @@ namespace TextCompressor {
 
         //Reads a single ASCII character from the given binary stream and returns it in a string
         private string getASCIIChar(BinaryStream stream) {
-            byte bCh = 0;
+            /*byte bCh = 0;
             for (int i = 1; i < 8; ++i) {
                 byte bit = stream.readBit();
                 bit = (byte)(bit << 7-i);
                 bCh = (byte)(bCh | bit);
-            }
-            byte[] ch = { bCh };
+            }*/
+            byte[] ch = { stream.readByte() };
             return Encoding.ASCII.GetString(ch);
         }
 
