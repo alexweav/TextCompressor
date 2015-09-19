@@ -123,14 +123,15 @@ namespace DataStructures {
 
         //Returns the BinarySequence in the form of a string of 1 and 0 characters
         public override string ToString() {
+            BigInteger bufferData = data;
             string output = "";
             for (int i = 0; i < bitLength; ++i) {
-                if (data.IsEven) {
-                    data = BigInteger.Divide(data, new BigInteger(2));
+                if (bufferData.IsEven) {
+                    bufferData = BigInteger.Divide(bufferData, new BigInteger(2));
                     output = "0" + output;
                 } else {
-                    data = BigInteger.Subtract(data, new BigInteger(1));
-                    data = BigInteger.Divide(data, new BigInteger(2));
+                    bufferData = BigInteger.Subtract(bufferData, new BigInteger(1));
+                    bufferData = BigInteger.Divide(bufferData, new BigInteger(2));
                     output = "1" + output;
                 }
             }

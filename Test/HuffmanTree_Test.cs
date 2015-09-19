@@ -38,6 +38,11 @@ namespace TextCompressor_Test {
             HuffmanTree t = new HuffmanTree(charset, weights);
             Assert.AreEqual(0, t.getCharset().Length);
         }
+
+        [TestMethod]
+        public void HuffmanTree_BuildFromFile_GetsCorrectTree() {
+
+        }
 #endregion
 
 #region getHuffmanCode_test
@@ -151,6 +156,8 @@ namespace TextCompressor_Test {
             HuffmanTree t = new HuffmanTree(charset, weights);
             Assert.AreEqual("0001010000010001010001001010010001010000111010000100101000110101000111101000101", t.getBinaryRepresentation().ToString());    //0001A0001D1H1C1B01F1G1E
         }
+
+
 
 #endregion
 

@@ -35,11 +35,13 @@ namespace TextCompressor {
             }
             if (choice == 49) {
                 TextFile text = getTextFile();
-                EncodedFile enf = text.encodeFile();
+                var validPathStart = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "TextCompressor");
+                string filepath = Path.Combine(validPathStart, "TextCompressor_EncodedFile.hct");
+                EncodedFile enf = text.encodeFile(filepath);
             } else if (choice == 50) {
                 EncodedFile encoded = getEncodedFile();
-                encoded.decodeFile();
-                
+                string text = encoded.decodeFile();
+                Console.WriteLine(text);
             }
         }
 

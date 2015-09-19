@@ -198,5 +198,38 @@ namespace TextCompressor_Test {
         }
         #endregion
 
+        #region EncodeFile_test
+        [TestMethod]
+        public void EncodeFile_EmptyFile_EmptyEncodedFile() {
+            var validPathStart = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "TextCompressor");
+            string filepath = Path.Combine(validPathStart, "TextCompressor_TextFile_Test.txt");
+            if (!File.Exists(filepath)) {
+                System.IO.File.Create(filepath).Close();
+            }
+            TextFile file = new TextFile(filepath);
+            string encodedFilepath = Path.Combine(validPathStart, "TextCompressor_EncodedFile_Test.hct");
+            EncodedFile encoded = file.encodeFile(encodedFilepath);
+            Assert.AreEqual(0, encoded.readFile()[0]);
+            System.IO.File.Delete(filepath);
+            System.IO.File.Delete(encodedFilepath);
+        }
+
+        [TestMethod]
+        public void EncodeFile_ValidFile_CompleteCycle() {
+            var validPathStart = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "TextCompressor");
+            string filepath = Path.Combine(validPathStart, "TextCompressor_TextFile_Test.txt");
+            if (!File.Exists(filepath)) {
+                System.IO.File.Create(filepath).Close();
+            }
+            TextFile file = new TextFile(filepath);
+            file.writeText("Mississippi river");
+            string encodedFilepath = Path.Combine(validPathStart, "TextCompressor_EncodedFile_Test.hct");
+            EncodedFile encoded = file.encodeFile(encodedFilepath);
+            Assert.AreEqual("Mississippi river", encoded.decodeFile());
+            System.IO.File.Delete(filepath);
+            System.IO.File.Delete(encodedFilepath);
+        }
+        #endregion
+
     }
 }

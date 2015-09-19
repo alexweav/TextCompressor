@@ -24,7 +24,7 @@ namespace TextCompressor {
             }
             else {
                 if (creatingNew) {
-                    File.Create(filepath);
+                    File.Create(filepath).Close();
                     this.filepath = filepath;
                 } else {
                     throw new ArgumentException("Filepath is not valid.");
@@ -42,7 +42,7 @@ namespace TextCompressor {
                     this.filepath = value;
                 }
                 else {
-                    File.Create(value);
+                    File.Create(value).Close();
                     this.filepath = value;
                 }
             }
@@ -59,9 +59,9 @@ namespace TextCompressor {
             return File.ReadAllBytes(filepath);
         }
 
-        //Decodes the file and prints the results to console
+        //Decodes the file and returns the results
         //Desperately in need of refactorization
-        public void decodeFile() {
+        public string decodeFile() {
             byte[] file = readFile();
             byte huffmanDataLength = file[0];
             int fileStartIndex = huffmanDataLength + 1;
@@ -70,7 +70,7 @@ namespace TextCompressor {
             byte[] textData = new byte[file.Length - huffmanDataLength - 1];
             Array.Copy(file, fileStartIndex, textData, 0, textData.Length);
             string text = getText(new BinaryStream(textData), codeTable);
-            Console.WriteLine(text);
+            return text;
         }
 
         //Reads the huffman data at the beginning of the file, and returns the corresponding huffman tree

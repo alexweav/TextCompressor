@@ -169,8 +169,13 @@ namespace TextCompressor {
         //Takes the encoded huffman tree data from the beginning of an encoded document as a binary stream
         //Populates the huffman tree from given data
         private HuffmanTreeNode buildTreeFromBinary(BinaryStream stream) {
-            byte bit = stream.readBit();
-            if (bit == 1) {
+            byte nextBitValue;
+            try {
+                nextBitValue = stream.readBit();
+            } catch {
+                return null;
+            }
+            if (nextBitValue == 1) {
                 return new HuffmanTreeNode(getASCIIChar(stream), null, null);
             } else {
                 HuffmanTreeNode leftChild = buildTreeFromBinary(stream);

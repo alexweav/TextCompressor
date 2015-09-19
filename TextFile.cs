@@ -111,14 +111,14 @@ namespace TextCompressor {
         }
 
         //Builds an encoded .hct file from the text file
-        public EncodedFile encodeFile() {
+        public EncodedFile encodeFile(string encodedFilepath) {
             char[] charset = getCharset();
             int[] weights = getCharFrequencies(charset);
             HuffmanTree tree = new HuffmanTree(charset, weights);
             Dictionary<char, BinarySequence> codeTable = tree.getEncodingTable();
             BinarySequence encoded = encodeToBinary(codeTable);
             BinarySequence huffmanData = tree.getBinaryRepresentation();
-            EncodedFile enf = new EncodedFile("C:\\Users\\Owner\\Documents\\encodedTEST.hct", EncodedFile.CREATE_NEW); //get fp from user
+            EncodedFile enf = new EncodedFile(encodedFilepath, EncodedFile.CREATE_NEW); //get fp from user
             writeEncodedFile(enf, huffmanData, encoded);
             return enf;
         }
@@ -128,7 +128,8 @@ namespace TextCompressor {
         private void writeEncodedFile(EncodedFile enf, BinarySequence huffmanData, BinarySequence body) {
             BinaryWriter writer = new BinaryWriter(File.Open(enf.Filepath, FileMode.Create));
             writeBinarySequence(huffmanData, writer, true);
-            writeBinarySequence(body, writer, false);
+            writeBinarySequence(body, writer, true);
+            writer.Close();
         }
 
         //Given a sequence of binary data in the form of a BinarySequence, a writer, and a writeLength boolean
@@ -136,7 +137,8 @@ namespace TextCompressor {
         //If writeLength is true, the data is preceded by an unsigned byte value which represents the length of the data in bytes
         private void writeBinarySequence(BinarySequence data, BinaryWriter writer, Boolean writeLength) {
             int dataLength = data.getLength();
-            int numExtraZeros = dataLength % 8;
+            int numExtraZeros = (8 - dataLength % 8)%8;
+
             for (int i = 0; i < numExtraZeros; ++i) {
                 data.concatenate(0);
             }
